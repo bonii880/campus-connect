@@ -1,7 +1,6 @@
 body {
-    background-color: #1a1a2e; /* Dark theme */
-    background-image: url('❤️'), url('😍'), url('💖'), url('💕');
+    background-image: url('path-to-your-image.png'); /* Update with the correct path */
+    background-size: cover;
+    background-position: center;
     background-repeat: repeat;
-    background-size: 30px 30px;
 }
-

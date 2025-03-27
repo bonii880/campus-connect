@@ -1,1 +1,7 @@
+body {
+    background-color: #1a1a2e; /* Dark theme */
+    background-image: url('❤️'), url('😍'), url('💖'), url('💕');
+    background-repeat: repeat;
+    background-size: 30px 30px;
+}
 

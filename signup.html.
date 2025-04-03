@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CampusConnect</title>
+    <title>Sign Up - CampusConnect</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
@@ -16,47 +16,69 @@
             height: 100vh;
             text-align: center;
         }
-        .container {
-            max-width: 600px;
+        .signup-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            width: 350px;
         }
-        h1 {
-            font-size: 3rem;
-            font-weight: bold;
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
         }
-        span {
-            color: #ff4da6;
-        }
-        p {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-        }
-        .buttons button {
+        .signup-btn {
             background-color: #ff4da6;
             color: white;
             border: none;
-            padding: 10px 20px;
-            margin: 10px;
+            padding: 10px;
+            width: 100%;
             font-size: 1.2rem;
-            border-radius: 20px;
+            border-radius: 5px;
             cursor: pointer;
         }
-        .buttons button:hover {
+        .signup-btn:hover {
             background-color: #e60073;
         }
-        .buttons a {
-            text-decoration: none;
+        .google-signup {
+            background-color: #db4437;
+        }
+        .google-signup:hover {
+            background-color: #b33627;
+        }
+        .back-btn {
+            margin-top: 10px;
+            background-color: transparent;
             color: white;
+            text-decoration: underline;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to <span>CampusConnect</span></h1>
-        <p>Find love, friendships, or casual connections with students across universities.</p>
-        <div class="buttons">
-            <button onclick="window.location.href='signup.html'">Sign Up</button>
-            <button onclick="window.location.href='login.html'">Login</button>
-        </div>
+    <div class="signup-container">
+        <h2>Sign Up</h2>
+        <form>
+            <input type="text" placeholder="Full Name" required>
+            <input type="number" placeholder="Age" required>
+            <select required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+            <input type="text" placeholder="Your Interests" required>
+            <input type="email" placeholder="Email" required>
+            <input type="password" placeholder="Password" required>
+            <input type="tel" placeholder="Phone Number" required>
+            <button type="submit" class="signup-btn">Sign Up</button>
+            <button type="button" class="signup-btn google-signup">Sign Up with Google</button>
+            <button type="button" class="back-btn" onclick="window.location.href='index.html'">Back to Home</button>
+        </form>
     </div>
 </body>
 </html>

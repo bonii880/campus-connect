@@ -1,3 +1,4 @@
+/* General Styles */
 body {
     background-color: black;
     color: white;
@@ -7,11 +8,12 @@ body {
     align-items: center;
     height: 100vh;
     text-align: center;
-    flex-direction: column;
+    margin: 0;
 }
 
+/* Container for Home Page */
 .container {
-    max-width: 500px;
+    max-width: 600px;
 }
 
 h1 {
@@ -28,28 +30,54 @@ p {
     margin-bottom: 20px;
 }
 
-.btn {
-    display: inline-block;
+/* Buttons */
+.buttons button {
     background-color: #ff4da6;
     color: white;
-    text-decoration: none;
+    border: none;
     padding: 10px 20px;
     margin: 10px;
     font-size: 1.2rem;
     border-radius: 20px;
     cursor: pointer;
-    border: none;
 }
 
-.btn:hover {
+.buttons button:hover {
     background-color: #e60073;
 }
 
+/* Forms */
+.form-container {
+    background-color: #222;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+}
+
+.form-container h2 {
+    color: #ff4da6;
+}
+
 input, select {
-    display: block;
     width: 100%;
     padding: 10px;
     margin: 10px 0;
-    border: none;
+    border: 1px solid #ff4da6;
     border-radius: 5px;
+    background-color: #333;
+    color: white;
+}
+
+button {
+    background-color: #ff4da6;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #e60073;
 }

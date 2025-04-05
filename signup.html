@@ -79,49 +79,8 @@
             <input type="tel" placeholder="Phone Number" required />
             <button type="submit">Sign Up</button>
             <button type="button" class="google-btn">Sign Up with Google</button>
-            <button id="googleSignupBtn">Sign up with Google</button>
-
         </form>
         <div class="note">Already have an account? <a href="login.html" style="color: #ff4da6;">Login here</a></div>
     </div>
-    // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDte9Kkm6OF1o3hm3J-CNaRpcH7yJgmgns",
-  authDomain: "campusconnect-176c0.firebaseapp.com",
-  projectId: "campusconnect-176c0",
-  storageBucket: "campusconnect-176c0.firebasestorage.app",
-  messagingSenderId: "835848840763",
-  appId: "1:835848840763:web:e6750d9367e51dc78ede1e",
-  measurementId: "G-YXJ85MPK4N"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-    <script>
-  const provider = new firebase.auth.GoogleAuthProvider();
-
-  document.getElementById('googleSignupBtn').addEventListener('click', () => {
-    auth.signInWithPopup(provider)
-      .then(result => {
-        const user = result.user;
-        alert("Signed in as: " + user.displayName);
-        // You can redirect to a welcome page here
-        window.location.href = "welcome.html";
-      })
-      .catch(error => {
-        console.error("Error during sign in", error);
-        alert("Sign in failed: " + error.message);
-      });
-  });
-</script>
-
 </body>
 </html>

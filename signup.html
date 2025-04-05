@@ -103,5 +103,23 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+    <script>
+  const provider = new firebase.auth.GoogleAuthProvider();
+
+  document.getElementById('googleSignupBtn').addEventListener('click', () => {
+    auth.signInWithPopup(provider)
+      .then(result => {
+        const user = result.user;
+        alert("Signed in as: " + user.displayName);
+        // You can redirect to a welcome page here
+        window.location.href = "welcome.html";
+      })
+      .catch(error => {
+        console.error("Error during sign in", error);
+        alert("Sign in failed: " + error.message);
+      });
+  });
+</script>
+
 </body>
 </html>

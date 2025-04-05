@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Sign Up - CampusConnect</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .signup-container {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+        h2 {
+            color: #ff4da6;
+            margin-bottom: 20px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+        button {
+            background-color: #ff4da6;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin-top: 15px;
+            font-size: 1.1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #e60073;
+        }
+        .google-btn {
+            background-color: #db4437;
+            margin-top: 10px;
+        }
+        .note {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h2>Create Account</h2>
+        <form action="#" method="POST">
+            <input type="text" placeholder="Name" required />
+            <input type="email" placeholder="Email" required />
+            <input type="password" placeholder="Password" required />
+            <input type="number" placeholder="Age" min="18" required />
+            <select required>
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="nonbinary">Non-Binary</option>
+            </select>
+            <input type="text" placeholder="Your Interests (e.g. music, sports, books)" required />
+            <input type="tel" placeholder="Phone Number" required />
+            <button type="submit">Sign Up</button>
+            <button type="button" class="google-btn">Sign Up with Google</button>
+        </form>
+        <div class="note">Already have an account? <a href="login.html" style="color: #ff4da6;">Login here</a></div>
+    </div>
+</body>
+</html>

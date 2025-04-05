@@ -1,19 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CampusConnect</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome to CampusConnect</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #ff4da6;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin: 20px 0;
+      color: #eee;
+    }
+
+    .buttons {
+      margin-top: 30px;
+    }
+
+    .buttons a {
+      text-decoration: none;
+    }
+
+    .buttons button {
+      background-color: #ff4da6;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      margin: 10px;
+      font-size: 1.2rem;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .buttons button:hover {
+      background-color: #e60073;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to <span>CampusConnect</span></h1>
-        <p>Find love, friendships, or casual connections with students across universities.</p>
-        <div class="buttons">
-            <a href="signup.html"><button class="signup">Sign Up</button></a>
-            <a href="login.html"><button class="login">Login</button></a>
-        </div>
+  <div class="container">
+    <h1>Welcome to <span style="color:#fff;">CampusConnect</span></h1>
+    <p>Connect with students across universities. Make friends. Find love. Build memories.</p>
+    <div class="buttons">
+      <a href="signup.html"><button>Sign Up</button></a>
+      <a href="login.html"><button>Login</button></a>
     </div>
+  </div>
 </body>
 </html>

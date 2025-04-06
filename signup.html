@@ -1,97 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CampusConnect - Sign Up</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CampusConnect | Sign Up</title>
   <style>
     body {
-      background-color: black;
-      color: white;
       font-family: Arial, sans-serif;
+      background-color: #111;
+      color: #fff;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      margin: 0;
     }
     .signup-container {
-      background-color: rgba(255, 255, 255, 0.1);
-      padding: 40px;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 500px;
-      text-align: center;
+      background-color: #1c1c1c;
+      padding: 30px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
     }
-    input, select, button {
+    .signup-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input, select {
       width: 100%;
       padding: 10px;
-      margin: 10px 0;
-      border: none;
+      margin: 8px 0;
       border-radius: 5px;
-      font-size: 1rem;
+      border: none;
+      font-size: 14px;
     }
     button {
-      background-color: #ff4da6;
-      color: white;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      margin-top: 10px;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #e60073;
+    .signup-btn {
+      background-color: #ff3399;
+      color: white;
+    }
+    .google-btn {
+      background-color: #e6007e;
+      color: white;
+    }
+    .divider {
+      text-align: center;
+      margin: 15px 0;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
   <div class="signup-container">
-    <h2>Sign Up</h2>
-    <input type="text" id="name" placeholder="Full Name">
-    <input type="number" id="age" placeholder="Age">
-    <select id="gender">
-      <option value="">Select Gender</option>
-      <option value="male">Male</option>
-      <option value="female">Female</option>
-      <option value="other">Other</option>
-    </select>
-    <input type="text" id="interest" placeholder="Your Interests (e.g. music, sports)">
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Password">
-    <button id="signup-btn">Sign Up</button>
+    <h2>Create Your Account</h2>
+    <form id="signup-form">
+      <input type="text" placeholder="Full Name" required />
+      <input type="number" placeholder="Age" required />
+      <select required>
+        <option value="">Select Gender</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option>
+      </select>
+      <input type="text" placeholder="Your Interests (e.g. music, sports)" />
+      <input type="email" placeholder="Email" required />
+      <input type="password" placeholder="Password" required />
+      <button type="submit" class="signup-btn">Sign Up</button>
+    </form>
 
-    <p>or</p>
-    <button onclick="signInWithGoogle()">Sign Up with Google</button>
+    <div class="divider">or</div>
+
+    <!-- Google Sign-Up Button -->
+    <button id="google-signup-btn" class="google-btn">Sign Up with Google</button>
   </div>
 
-  <!-- ✅ Firebase App & Auth Scripts -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <!-- Firebase Google Sign-In Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
 
-  <!-- ✅ Firebase Config & Google Auth -->
-  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDte9Kkm6OF1o3hm3J-CNaRpcH7yJgmgns",
       authDomain: "campusconnect-176c0.firebaseapp.com",
       projectId: "campusconnect-176c0",
-      storageBucket: "campusconnect-176c0.firebasestorage.app",
+      storageBucket: "campusconnect-176c0.appspot.com",
       messagingSenderId: "835848840763",
       appId: "1:835848840763:web:e6750d9367e51dc78ede1e",
       measurementId: "G-YXJ85MPK4N"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
 
-    function signInWithGoogle() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider)
-        .then((result) => {
-          const user = result.user;
-          alert("Signed in as " + user.displayName);
-          window.location.href = "welcome.html";
-        })
-        .catch((error) => {
-          console.error(error);
-          alert("Google Sign-In failed: " + error.message);
-        });
+    const googleBtn = document.getElementById("google-signup-btn");
+
+    if (googleBtn) {
+      googleBtn.addEventListener("click", () => {
+        signInWithPopup(auth, provider)
+          .then((result) => {
+            // ✅ Redirect to welcome page on success
+            window.location.href = "welcome.html";
+          })
+          .catch((error) => {
+            alert("Google Sign-In failed: " + error.message);
+          });
+      });
     }
   </script>
 </body>

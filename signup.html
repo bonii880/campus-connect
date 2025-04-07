@@ -1,30 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CampusConnect Sign In</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
-</head>
-<body>
-  <div class="container">
-    <h2>Welcome to CampusConnect</h2>
-    <p>Sign in to continue</p>
+  <meta charset="UTF-8">
+  <title>CampusConnect | Sign In</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Firebase App (the core Firebase SDK) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
-    <form id="signin-form">
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <button type="submit">Sign In</button>
-    </form>
-
-    <p>or</p>
-    <button id="google-signin">Sign in with Google</button>
-  </div>
-
-  <script>
-    // Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyDte9Kkm6OF1o3hm3J-CNaRpcH7yJgmgns",
       authDomain: "campusconnect-176c0.firebaseapp.com",
@@ -35,60 +19,105 @@
       measurementId: "G-YXJ85MPK4N"
     };
 
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    // Email sign-in
-    document.getElementById("signin-form").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      auth.signInWithEmailAndPassword(email, password)
-        .then(() => {
-          window.location.href = "profile.html"; // Redirect after login
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
-    });
-
-    // Google sign-in
-    document.getElementById("google-signin").addEventListener("click", function () {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider)
-        .then(() => {
-          window.location.href = "profile.html"; // Redirect after login
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
-    });
-  </script>
-</body>
-</html>
-<script>
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyDte9Kkm6OF1o3hm3J-CNaRpcH7yJgmgns",
-        authDomain: "campusconnect-176c0.firebaseapp.com",
-        projectId: "campusconnect-176c0",
-        storageBucket: "campusconnect-176c0.appspot.com",
-        messagingSenderId: "835848840763",
-        appId: "1:835848840763:web:e6750d9367e51dc78ede1e",
-        measurementId: "G-YXJ85MPK4N"
-    };
-
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    document.getElementById("signin-btn").addEventListener("click", function () {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          window.location.href = "profile.html";
+        })
+        .catch((error) => {
+          alert("Error: " + error.message);
+        });
+    });
+
+    document.getElementById("google-signin").addEventListener("click", function () {
+      signInWithPopup(auth, provider)
+        .then(() => {
+          window.location.href = "profile.html";
+        })
+        .catch((error) => {
+          alert("Google Sign-In Failed: " + error.message);
+        });
+    });
 
     onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // Redirect after successful login
-            window.location.href = "profile.html";
-        }
+      if (user) {
+        window.location.href = "profile.html";
+      }
     });
-</script>
+  </script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #222;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ff4da6;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #ff4da6;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #ff4da6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #e60073;
+    }
+
+    .google-btn {
+      background-color: #4285F4;
+    }
+
+    .google-btn:hover {
+      background-color: #357ae8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Sign In to CampusConnect</h2>
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button id="signin-btn">Sign In</button>
+    <button class="google-btn" id="google-signin">Sign In with Google</button>
+  </div>
+</body>
+</html>

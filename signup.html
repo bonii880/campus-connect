@@ -3,105 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CampusConnect - Sign Up</title>
+  <title>CampusConnect Sign In</title>
   <link rel="stylesheet" href="styles.css" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #fefefe;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .signup-container {
-      background-color: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-      width: 100%;
-      max-width: 600px;
-    }
-    h2 {
-      text-align: center;
-      color: #ff4da6;
-      margin-bottom: 20px;
-    }
-    form input, form select {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
-    label {
-      margin-top: 10px;
-      display: block;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #ff4da6;
-      color: white;
-      border: none;
-      font-size: 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    button:hover {
-      background-color: #e60073;
-    }
-    .google-signup {
-      background-color: #4285f4;
-      margin-bottom: 10px;
-    }
-  </style>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
 </head>
 <body>
-  <div class="signup-container">
-    <h2>Sign Up to CampusConnect</h2>
-    <form id="signupForm" action="#" method="POST" enctype="multipart/form-data">
-      <input type="text" name="name" placeholder="Full Name" required />
-      <input type="email" name="email" placeholder="Email" required />
-      <input type="password" name="password" placeholder="Password" required />
-      <input type="tel" name="phone" placeholder="Phone Number" required />
-      <input type="number" name="age" placeholder="Age" required />
-      <select name="gender" required>
-        <option value="">Select Gender</option>
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-        <option value="other">Other</option>
-      </select>
-      <input type="text" name="interests" placeholder="Your Interests (e.g. music, books)" required />
-      <input type="text" name="university" placeholder="University" required />
-      <input type="text" name="universityCampus" placeholder="University Campus" required />
-      <input type="text" name="college" placeholder="College (e.g. KMTC)" required />
-      <input type="text" name="collegeCampus" placeholder="College Campus" required />
-      <input type="text" name="yearOfStudy" placeholder="Year of Study" required />
-      <input type="text" name="course" placeholder="Course" required />
-      
-      <label for="profilePic1">Upload Profile Picture 1:</label>
-      <input type="file" name="profilePic1" accept="image/*" required />
-      <label for="profilePic2">Upload Profile Picture 2:</label>
-      <input type="file" name="profilePic2" accept="image/*" required />
+  <div class="container">
+    <h2>Welcome to CampusConnect</h2>
+    <p>Sign in to continue</p>
 
-      <!-- Google Sign-Up button -->
-      <button type="button" class="google-signup" onclick="signInWithGoogle()">Sign up with Google</button>
-
-      <button type="submit">Create Account</button>
+    <form id="signin-form">
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Sign In</button>
     </form>
+
+    <p>or</p>
+    <button id="google-signin">Sign in with Google</button>
   </div>
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-
   <script>
-    // Firebase config
+    // Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyDte9Kkm6OF1o3hm3J-CNaRpcH7yJgmgns",
       authDomain: "campusconnect-176c0.firebaseapp.com",
@@ -113,22 +36,35 @@
     };
 
     // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
+    const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    function signInWithGoogle() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider)
-        .then((result) => {
-          const user = result.user;
-          alert("Signed in as: " + user.displayName);
-          // Redirect or handle additional signup steps
+    // Email sign-in
+    document.getElementById("signin-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+          window.location.href = "profile.html"; // Redirect after login
         })
         .catch((error) => {
-          console.error("Google Sign-In Error:", error.message);
-          alert("Google Sign-In Failed.");
+          alert(error.message);
         });
-    }
+    });
+
+    // Google sign-in
+    document.getElementById("google-signin").addEventListener("click", function () {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then(() => {
+          window.location.href = "profile.html"; // Redirect after login
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    });
   </script>
 </body>
 </html>

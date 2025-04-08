@@ -92,7 +92,7 @@
 <body>
   <div class="container">
     <h1>Complete Your Profile</h1>
-    <form>
+    <form id="profileForm">
       <label>Full Name</label>
       <input type="text" placeholder="e.g. John Doe" required>
 
@@ -203,7 +203,7 @@
   </div>
 
   <script>
-    // Hide student-only fields if "no" is selected
+    // Toggle visibility of student-only fields
     const studentSelect = document.getElementById('isStudent');
     const studentFields = document.querySelectorAll('.student-only');
 
@@ -216,7 +216,17 @@
     }
 
     studentSelect.addEventListener('change', toggleStudentFields);
-    toggleStudentFields(); // initial call
+    toggleStudentFields(); // Initial check
+
+    // Handle form submission and redirect
+    document.getElementById('profileForm').addEventListener('submit', function(e) {
+      e.preventDefault(); // Prevent actual form submit
+
+      alert("Profile saved! Redirecting...");
+
+      // Redirect to matchmaking or next page
+      window.location.href = "matchmaking.html"; // You can change this to any next page
+    });
   </script>
 </body>
 </html>

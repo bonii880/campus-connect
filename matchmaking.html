@@ -1,1 +1,100 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Find a Match</title>
+  <style>
+    body {
+      background-color: #1e1e2f;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background-color: #2b2b3d;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    h2 {
+      text-align: center;
+      color: #ffa600;
+    }
+
+    label {
+      margin-top: 15px;
+      display: block;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: none;
+      background-color: #3a3a4f;
+      color: white;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 10px 20px;
+      background-color: #ffa600;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #ff8800;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Find Your Perfect Match</h2>
+    <form id="matchForm">
+      <label for="matchType">What are you looking for?</label>
+      <select id="matchType" required>
+        <option value="">-- Select Match Type --</option>
+        <option value="Friends">Friends</option>
+        <option value="Relationship">Relationship</option>
+        <option value="Casual">Casual</option>
+      </select>
+
+      <label for="campus">Preferred Campus (University/College)</label>
+      <input type="text" id="campus" placeholder="e.g., Kisii Campus" required>
+
+      <label for="ageRange">Preferred Age Range</label>
+      <input type="text" id="ageRange" placeholder="e.g., 20-26" required>
+
+      <button type="submit">Find Matches</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("matchForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      // Fetch form inputs
+      const matchType = document.getElementById("matchType").value;
+      const campus = document.getElementById("campus").value.trim().toLowerCase();
+      const ageRange = document.getElementById("ageRange").value;
+
+      // You can now use these values to query Firebase or wherever you’re storing user profiles
+      // For now, let’s redirect to a results page (we will build this next)
+      const url = `match-results.html?type=${matchType}&campus=${encodeURIComponent(campus)}&age=${encodeURIComponent(ageRange)}`;
+      window.location.href = url;
+    });
+  </script>
+</body>
+</html>

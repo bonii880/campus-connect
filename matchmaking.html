@@ -1,99 +1,142 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Find a Match</title>
+  <title>Find Your Match - CampusConnect</title>
   <style>
     body {
       background-color: #1e1e2f;
-      color: white;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: auto;
-      background-color: #2b2b3d;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
       padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
     }
 
-    h2 {
+    h1 {
       text-align: center;
       color: #ffa600;
     }
 
-    label {
-      margin-top: 15px;
-      display: block;
+    form {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #2b2b3d;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
     }
 
-    input, select {
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+    }
+
+    input[type="text"], select {
       width: 100%;
       padding: 10px;
-      margin-top: 5px;
-      border-radius: 6px;
       border: none;
+      border-radius: 8px;
       background-color: #3a3a4f;
-      color: white;
+      color: #fff;
+      margin-top: 5px;
     }
 
     button {
-      margin-top: 25px;
-      padding: 10px 20px;
+      margin-top: 20px;
+      padding: 12px 25px;
       background-color: #ffa600;
-      color: black;
-      font-weight: bold;
       border: none;
-      border-radius: 6px;
+      color: #000;
+      font-weight: bold;
+      border-radius: 8px;
       cursor: pointer;
+      transition: background 0.3s ease;
       width: 100%;
     }
 
     button:hover {
       background-color: #ff8800;
     }
+
+    .results {
+      margin-top: 30px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .match-card {
+      background-color: #3a3a4f;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Find Your Perfect Match</h2>
-    <form id="matchForm">
-      <label for="matchType">What are you looking for?</label>
-      <select id="matchType" required>
-        <option value="">-- Select Match Type --</option>
-        <option value="Friends">Friends</option>
-        <option value="Relationship">Relationship</option>
-        <option value="Casual">Casual</option>
-      </select>
+  <h1>Find Your Match</h1>
+  <form id="matchForm">
+    <label>Looking for:</label>
+    <select id="matchType">
+      <option value="">-- Select --</option>
+      <option value="Friends">Friends</option>
+      <option value="Relationship">Relationship</option>
+      <option value="Casual">Casual</option>
+    </select>
 
-      <label for="campus">Preferred Campus (University/College)</label>
-      <input type="text" id="campus" placeholder="e.g., Kisii Campus" required>
+    <label>Preferred Campus:</label>
+    <input type="text" id="preferredCampus" placeholder="e.g. Chuka Main, KMTC Kisumu">
 
-      <label for="ageRange">Preferred Age Range</label>
-      <input type="text" id="ageRange" placeholder="e.g., 20-26" required>
+    <label>Preferred Age Range:</label>
+    <input type="text" id="preferredAge" placeholder="e.g. 20-25">
 
-      <button type="submit">Find Matches</button>
-    </form>
-  </div>
+    <button type="submit">Find Matches</button>
+  </form>
+
+  <div class="results" id="matchResults"></div>
 
   <script>
-    document.getElementById("matchForm").addEventListener("submit", function(e) {
+    document.getElementById('matchForm').addEventListener('submit', function (e) {
       e.preventDefault();
 
-      // Fetch form inputs
-      const matchType = document.getElementById("matchType").value;
-      const campus = document.getElementById("campus").value.trim().toLowerCase();
-      const ageRange = document.getElementById("ageRange").value;
+      const matchType = document.getElementById('matchType').value;
+      const campus = document.getElementById('preferredCampus').value.toLowerCase();
+      const ageRange = document.getElementById('preferredAge').value;
 
-      // You can now use these values to query Firebase or wherever you’re storing user profiles
-      // For now, let’s redirect to a results page (we will build this next)
-      const url = `match-results.html?type=${matchType}&campus=${encodeURIComponent(campus)}&age=${encodeURIComponent(ageRange)}`;
-      window.location.href = url;
+      const [minAge, maxAge] = ageRange.split('-').map(num => parseInt(num.trim()));
+
+      // Simulate data - replace with actual data pulled from database
+      const users = JSON.parse(localStorage.getItem('profiles')) || [];
+
+      const results = users.filter(user => {
+        const age = parseInt(user.age);
+        return (
+          user.matchType === matchType &&
+          user.campus.toLowerCase().includes(campus) &&
+          age >= minAge && age <= maxAge
+        );
+      });
+
+      const resultDiv = document.getElementById('matchResults');
+      resultDiv.innerHTML = "";
+
+      if (results.length === 0) {
+        resultDiv.innerHTML = "<p>No matches found based on your preferences.</p>";
+        return;
+      }
+
+      results.forEach(user => {
+        resultDiv.innerHTML += `
+          <div class="match-card">
+            <h3>${user.name}</h3>
+            <p><strong>Age:</strong> ${user.age}</p>
+            <p><strong>Campus:</strong> ${user.campus}</p>
+            <p><strong>Interests:</strong> ${user.interests}</p>
+            <p><strong>Bio:</strong> ${user.bio}</p>
+          </div>
+        `;
+      });
     });
   </script>
 </body>

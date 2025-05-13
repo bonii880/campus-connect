@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Match Preferences | CampusConnect</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js"></script>
+  <script src="firebase.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Choose Your Match Preferences</h2>
+
+  <form id="matchForm">
+    <label>Are you a student?</label><br>
+    <select id="isStudent">
+      <option value="yes">Yes</option>
+      <option value="no">No</option>
+    </select><br><br>
+
+    <div id="studentSection" style="display:none;">
+      <label>Institution Type:</label><br>
+      <select id="institutionType">
+        <option value="university">University</option>
+        <option value="college">College</option>
+      </select><br><br>
+
+      <label>Institution Name:</label><br>
+      <input type="text" id="institutionName"><br><br>
+
+      <label>Campus:</label><br>
+      <input type="text" id="campus"><br><br>
+
+      <label>Year of Study:</label><br>
+      <select id="yearOfStudy">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select><br><br>
+    </div>
+
+    <div id="outsiderSection" style="display:none;">
+      <label>Do you want a student or outsider?</label><br>
+      <select id="outsiderPreference">
+        <option value="student">Student</option>
+        <option value="outsider">Outsider</option>
+      </select><br><br>
+
+      <div id="outsiderDetails" style="display:none;">
+        <label>What gender do you want?</label><br>
+        <select id="preferredGenderOutsider">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select><br><br>
+
+        <label>Occupation of match:</label><br>
+        <input type="text" id="matchOccupation"><br><br>
+
+        <label>County of residence:</label><br>
+        <input type="text" id="matchCounty"><br><br>
+      </div>
+    </div>
+
+    <label>Preferred Gender:</label><br>
+    <select id="preferredGender">
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+    </select><br><br>
+
+    <label>Preferred Age Range:</label><br>
+    Min: <input type="number" id="minAge">
+    Max: <input type="number" id="maxAge"><br><br>
+
+    <label>Do you want a Mubaba or Mumama?</label><br>
+    <select id="mubabaMumama">
+      <option value="none">No</option>
+      <option value="mubaba">Mubaba</option>
+      <option value="mumama">Mumama</option>
+    </select><br><br>
+
+    <div id="mubabaMumamaTarget" style="display:none;">
+      <label>You're looking for a:</label><br>
+      <select id="targetType">
+        <option value="baby girl">Baby Girl</option>
+        <option value="baby boy">Baby Boy</option>
+      </select><br><br>
+    </div>
+
+    <button type="submit">Save Preferences</button>
+  </form>
+
+  <script>
+    const isStudent = document.getElementById("isStudent");
+    const studentSection = document.getElementById("studentSection");
+    const outsiderSection = document.getElementById("outsiderSection");
+    const outsiderPreference = document.getElementById("outsiderPreference");
+    const outsiderDetails = document.getElementById("outsiderDetails");
+    const mubabaMumama = document.getElementById("mubabaMumama");
+    const mubabaMumamaTarget = document.getElementById("mubabaMumamaTarget");
+
+    isStudent.addEventListener("change", () => {
+      studentSection.style.display = isStudent.value === "yes" ? "block" : "none";
+      outsiderSection.style.display = isStudent.value === "no" ? "block" : "none";
+    });
+
+    outsiderPreference.addEventListener("change", () => {
+      outsiderDetails.style.display = outsiderPreference.value === "outsider" ? "block" : "none";
+    });
+
+    mubabaMumama.addEventListener("change", () => {
+      mubabaMumamaTarget.style.display = mubabaMumama.value !== "none" ? "block" : "none";
+    });
+  </script>
+</body>
+</html>

@@ -1,94 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Match Preferences | CampusConnect</title>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js"></script>
-  <script src="firebase.js"></script>
+  <meta charset="UTF-8">
+  <title>Matchmaking Preferences</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>Choose Your Match Preferences</h2>
+  <div class="container">
+    <h2>Matchmaking Preferences</h2>
 
-  <form id="matchForm">
     <label>Are you a student?</label><br>
     <select id="isStudent">
       <option value="yes">Yes</option>
       <option value="no">No</option>
     </select><br><br>
 
-    <div id="studentSection" style="display:none;">
-      <label>Institution Type:</label><br>
+    <div id="studentSection">
+      <label>Select Institution Type:</label><br>
       <select id="institutionType">
         <option value="university">University</option>
         <option value="college">College</option>
       </select><br><br>
 
-      <label>Institution Name:</label><br>
-      <input type="text" id="institutionName"><br><br>
+      <div id="institutionDetails">
+        <label for="institutionName">University/College Name:</label><br>
+        <input type="text" id="institutionName"><br><br>
 
-      <label>Campus:</label><br>
-      <input type="text" id="campus"><br><br>
+        <label for="campus">Campus:</label><br>
+        <input type="text" id="campus"><br><br>
+      </div>
 
-      <label>Year of Study:</label><br>
-      <select id="yearOfStudy">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
+      <label for="studyYear">Year of Study:</label><br>
+      <select id="studyYear">
+        <option value="1">1st Year</option>
+        <option value="2">2nd Year</option>
+        <option value="3">3rd Year</option>
+        <option value="4">4th Year</option>
+        <option value="5">5th Year</option>
+      </select><br><br>
+
+      <label for="preferredAge">Preferred Age:</label><br>
+      <input type="number" id="preferredAge"><br><br>
+
+      <label for="preferredGender">Preferred Gender:</label><br>
+      <select id="preferredGender">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option>
       </select><br><br>
     </div>
 
     <div id="outsiderSection" style="display:none;">
-      <label>Do you want a student or outsider?</label><br>
+      <label>Do you want a Student or an Outsider?</label><br>
       <select id="outsiderPreference">
         <option value="student">Student</option>
         <option value="outsider">Outsider</option>
       </select><br><br>
 
+      <div id="studentOutsiderDetails">
+        <label for="desiredSchool">If student, which school/university:</label><br>
+        <input type="text" id="desiredSchool"><br><br>
+
+        <label for="desiredAge">Preferred Age:</label><br>
+        <input type="number" id="desiredAge"><br><br>
+
+        <label for="desiredGender">Preferred Gender:</label><br>
+        <select id="desiredGender">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select><br><br>
+      </div>
+
       <div id="outsiderDetails" style="display:none;">
-        <label>What gender do you want?</label><br>
-        <select id="preferredGenderOutsider">
+        <label for="outsiderGender">Preferred Gender:</label><br>
+        <select id="outsiderGender">
           <option value="male">Male</option>
           <option value="female">Female</option>
         </select><br><br>
 
-        <label>Occupation of match:</label><br>
-        <input type="text" id="matchOccupation"><br><br>
+        <label for="occupation">What do you do for a living?</label><br>
+        <input type="text" id="occupation"><br><br>
 
-        <label>County of residence:</label><br>
-        <input type="text" id="matchCounty"><br><br>
+        <label for="county">County you live in:</label><br>
+        <input type="text" id="county"><br><br>
       </div>
     </div>
 
-    <label>Preferred Gender:</label><br>
-    <select id="preferredGender">
-      <option value="male">Male</option>
-      <option value="female">Female</option>
-    </select><br><br>
+    <hr>
 
-    <label>Preferred Age Range:</label><br>
-    Min: <input type="number" id="minAge">
-    Max: <input type="number" id="maxAge"><br><br>
-
-    <label>Do you want a Mubaba or Mumama?</label><br>
-    <select id="mubabaMumama">
+    <label>Are you a Mubaba or Mumama?</label><br>
+    <select id="youAre">
       <option value="none">No</option>
-      <option value="mubaba">Mubaba</option>
-      <option value="mumama">Mumama</option>
+      <option value="mubaba">Mubaba (Sugar Daddy)</option>
+      <option value="mumama">Mumama (Sugar Mommy)</option>
     </select><br><br>
 
-    <div id="mubabaMumamaTarget" style="display:none;">
+    <div id="lookingForBaby" style="display:none;">
       <label>You're looking for a:</label><br>
-      <select id="targetType">
+      <select id="babyType">
         <option value="baby girl">Baby Girl</option>
         <option value="baby boy">Baby Boy</option>
       </select><br><br>
     </div>
 
-    <button type="submit">Save Preferences</button>
-  </form>
+    <button onclick="submitPreferences()">Submit</button>
+  </div>
 
   <script>
     const isStudent = document.getElementById("isStudent");
@@ -96,8 +112,9 @@
     const outsiderSection = document.getElementById("outsiderSection");
     const outsiderPreference = document.getElementById("outsiderPreference");
     const outsiderDetails = document.getElementById("outsiderDetails");
-    const mubabaMumama = document.getElementById("mubabaMumama");
-    const mubabaMumamaTarget = document.getElementById("mubabaMumamaTarget");
+    const studentOutsiderDetails = document.getElementById("studentOutsiderDetails");
+    const youAre = document.getElementById("youAre");
+    const lookingForBaby = document.getElementById("lookingForBaby");
 
     isStudent.addEventListener("change", () => {
       studentSection.style.display = isStudent.value === "yes" ? "block" : "none";
@@ -105,12 +122,23 @@
     });
 
     outsiderPreference.addEventListener("change", () => {
-      outsiderDetails.style.display = outsiderPreference.value === "outsider" ? "block" : "none";
+      if (outsiderPreference.value === "student") {
+        studentOutsiderDetails.style.display = "block";
+        outsiderDetails.style.display = "none";
+      } else {
+        studentOutsiderDetails.style.display = "none";
+        outsiderDetails.style.display = "block";
+      }
     });
 
-    mubabaMumama.addEventListener("change", () => {
-      mubabaMumamaTarget.style.display = mubabaMumama.value !== "none" ? "block" : "none";
+    youAre.addEventListener("change", () => {
+      lookingForBaby.style.display = (youAre.value === "mubaba" || youAre.value === "mumama") ? "block" : "none";
     });
+
+    function submitPreferences() {
+      // You can collect data and send to Firestore here
+      alert("Preferences submitted!");
+    }
   </script>
 </body>
 </html>

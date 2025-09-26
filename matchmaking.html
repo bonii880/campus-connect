@@ -1,143 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Find Your Match - CampusConnect</title>
-  <style>
-    body {
-      background-color: #1e1e2f;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #fff;
-      padding: 30px;
-    }
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+  import { getFirestore, collection, getDocs, doc, getDoc, query } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+  import { firebaseConfig } from "./firebase.js";
 
-    h1 {
-      text-align: center;
-      color: #ffa600;
-    }
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
 
-    form {
-      max-width: 600px;
-      margin: 0 auto;
-      background-color: #2b2b3d;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.4);
-    }
+  const resultDiv = document.getElementById("matchResults");
 
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: 600;
-    }
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      try {
+        // Load saved preferences
+        const prefSnap = await getDoc(doc(db, "preferences", user.uid));
+        if (!prefSnap.exists()) {
+          resultDiv.innerHTML = "<p>You haven’t set preferences yet. Go back and fill them in.</p>";
+          return;
+        }
+        const prefs = prefSnap.data();
 
-    input[type="text"], select {
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      background-color: #3a3a4f;
-      color: #fff;
-      margin-top: 5px;
-    }
+        // Parse age range
+        const [minAge, maxAge] = prefs.ageRange.split("-").map(num => parseInt(num.trim()));
 
-    button {
-      margin-top: 20px;
-      padding: 12px 25px;
-      background-color: #ffa600;
-      border: none;
-      color: #000;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      width: 100%;
-    }
+        // Fetch all profiles
+        const q = query(collection(db, "profiles"));
+        const querySnapshot = await getDocs(q);
 
-    button:hover {
-      background-color: #ff8800;
-    }
+        let results = [];
+        querySnapshot.forEach((doc) => {
+          const profile = doc.data();
+          const age = parseInt(profile.age);
 
-    .results {
-      margin-top: 30px;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-    }
+          if (
+            profile.matchType === prefs.matchType &&
+            profile.campus.toLowerCase().includes(prefs.campus.toLowerCase()) &&
+            age >= minAge && age <= maxAge
+          ) {
+            results.push(profile);
+          }
+        });
 
-    .match-card {
-      background-color: #3a3a4f;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 15px;
-      color: #fff;
-    }
-  </style>
-</head>
-<body>
-  <h1>Find Your Match</h1>
-  <form id="matchForm">
-    <label>Looking for:</label>
-    <select id="matchType">
-      <option value="">-- Select --</option>
-      <option value="Friends">Friends</option>
-      <option value="Relationship">Relationship</option>
-      <option value="Casual">Casual</option>
-    </select>
+        resultDiv.innerHTML = "";
+        if (results.length === 0) {
+          resultDiv.innerHTML = "<p>No matches found based on your preferences.</p>";
+          return;
+        }
 
-    <label>Preferred Campus:</label>
-    <input type="text" id="preferredCampus" placeholder="e.g. Chuka Main, KMTC Kisumu">
+        results.forEach(user => {
+          resultDiv.innerHTML += `
+            <div class="match-card">
+              <h3>${user.name}</h3>
+              <p><strong>Age:</strong> ${user.age}</p>
+              <p><strong>Campus:</strong> ${user.campus}</p>
+              <p><strong>Interests:</strong> ${user.interests}</p>
+              <p><strong>Bio:</strong> ${user.bio}</p>
+            </div>
+          `;
+        });
 
-    <label>Preferred Age Range:</label>
-    <input type="text" id="preferredAge" placeholder="e.g. 20-25">
-
-    <button type="submit">Find Matches</button>
-  </form>
-
-  <div class="results" id="matchResults"></div>
-
-  <script>
-    document.getElementById('matchForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      const matchType = document.getElementById('matchType').value;
-      const campus = document.getElementById('preferredCampus').value.toLowerCase();
-      const ageRange = document.getElementById('preferredAge').value;
-
-      const [minAge, maxAge] = ageRange.split('-').map(num => parseInt(num.trim()));
-
-      // Simulate data - replace with actual data pulled from database
-      const users = JSON.parse(localStorage.getItem('profiles')) || [];
-
-      const results = users.filter(user => {
-        const age = parseInt(user.age);
-        return (
-          user.matchType === matchType &&
-          user.campus.toLowerCase().includes(campus) &&
-          age >= minAge && age <= maxAge
-        );
-      });
-
-      const resultDiv = document.getElementById('matchResults');
-      resultDiv.innerHTML = "";
-
-      if (results.length === 0) {
-        resultDiv.innerHTML = "<p>No matches found based on your preferences.</p>";
-        return;
+      } catch (err) {
+        console.error("Error loading matches:", err);
+        resultDiv.innerHTML = "<p>Something went wrong while loading matches.</p>";
       }
-
-      results.forEach(user => {
-        resultDiv.innerHTML += `
-          <div class="match-card">
-            <h3>${user.name}</h3>
-            <p><strong>Age:</strong> ${user.age}</p>
-            <p><strong>Campus:</strong> ${user.campus}</p>
-            <p><strong>Interests:</strong> ${user.interests}</p>
-            <p><strong>Bio:</strong> ${user.bio}</p>
-          </div>
-        `;
-      });
-    });
-  </script>
-</body>
-</html>
+    } else {
+      resultDiv.innerHTML = "<p>Please log in first.</p>";
+      window.location.href = "login.html";
+    }
+  });
+</script>

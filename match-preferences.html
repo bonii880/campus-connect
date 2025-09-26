@@ -1,144 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Matchmaking Preferences</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="container">
-    <h2>Matchmaking Preferences</h2>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+  import { firebaseConfig } from "./firebase.js";
 
-    <label>Are you a student?</label><br>
-    <select id="isStudent">
-      <option value="yes">Yes</option>
-      <option value="no">No</option>
-    </select><br><br>
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
 
-    <div id="studentSection">
-      <label>Select Institution Type:</label><br>
-      <select id="institutionType">
-        <option value="university">University</option>
-        <option value="college">College</option>
-      </select><br><br>
+  document.getElementById("prefForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      <div id="institutionDetails">
-        <label for="institutionName">University/College Name:</label><br>
-        <input type="text" id="institutionName"><br><br>
+    const matchType = document.getElementById("matchType").value;
+    const campus = document.getElementById("preferredCampus").value;
+    const ageRange = document.getElementById("preferredAge").value;
 
-        <label for="campus">Campus:</label><br>
-        <input type="text" id="campus"><br><br>
-      </div>
-
-      <label for="studyYear">Year of Study:</label><br>
-      <select id="studyYear">
-        <option value="1">1st Year</option>
-        <option value="2">2nd Year</option>
-        <option value="3">3rd Year</option>
-        <option value="4">4th Year</option>
-        <option value="5">5th Year</option>
-      </select><br><br>
-
-      <label for="preferredAge">Preferred Age:</label><br>
-      <input type="number" id="preferredAge"><br><br>
-
-      <label for="preferredGender">Preferred Gender:</label><br>
-      <select id="preferredGender">
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-        <option value="other">Other</option>
-      </select><br><br>
-    </div>
-
-    <div id="outsiderSection" style="display:none;">
-      <label>Do you want a Student or an Outsider?</label><br>
-      <select id="outsiderPreference">
-        <option value="student">Student</option>
-        <option value="outsider">Outsider</option>
-      </select><br><br>
-
-      <div id="studentOutsiderDetails">
-        <label for="desiredSchool">If student, which school/university:</label><br>
-        <input type="text" id="desiredSchool"><br><br>
-
-        <label for="desiredAge">Preferred Age:</label><br>
-        <input type="number" id="desiredAge"><br><br>
-
-        <label for="desiredGender">Preferred Gender:</label><br>
-        <select id="desiredGender">
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </select><br><br>
-      </div>
-
-      <div id="outsiderDetails" style="display:none;">
-        <label for="outsiderGender">Preferred Gender:</label><br>
-        <select id="outsiderGender">
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </select><br><br>
-
-        <label for="occupation">What do you do for a living?</label><br>
-        <input type="text" id="occupation"><br><br>
-
-        <label for="county">County you live in:</label><br>
-        <input type="text" id="county"><br><br>
-      </div>
-    </div>
-
-    <hr>
-
-    <label>Are you a Mubaba or Mumama?</label><br>
-    <select id="youAre">
-      <option value="none">No</option>
-      <option value="mubaba">Mubaba (Sugar Daddy)</option>
-      <option value="mumama">Mumama (Sugar Mommy)</option>
-    </select><br><br>
-
-    <div id="lookingForBaby" style="display:none;">
-      <label>You're looking for a:</label><br>
-      <select id="babyType">
-        <option value="baby girl">Baby Girl</option>
-        <option value="baby boy">Baby Boy</option>
-      </select><br><br>
-    </div>
-
-    <button onclick="submitPreferences()">Submit</button>
-  </div>
-
-  <script>
-    const isStudent = document.getElementById("isStudent");
-    const studentSection = document.getElementById("studentSection");
-    const outsiderSection = document.getElementById("outsiderSection");
-    const outsiderPreference = document.getElementById("outsiderPreference");
-    const outsiderDetails = document.getElementById("outsiderDetails");
-    const studentOutsiderDetails = document.getElementById("studentOutsiderDetails");
-    const youAre = document.getElementById("youAre");
-    const lookingForBaby = document.getElementById("lookingForBaby");
-
-    isStudent.addEventListener("change", () => {
-      studentSection.style.display = isStudent.value === "yes" ? "block" : "none";
-      outsiderSection.style.display = isStudent.value === "no" ? "block" : "none";
-    });
-
-    outsiderPreference.addEventListener("change", () => {
-      if (outsiderPreference.value === "student") {
-        studentOutsiderDetails.style.display = "block";
-        outsiderDetails.style.display = "none";
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          await setDoc(doc(db, "preferences", user.uid), {
+            matchType,
+            campus,
+            ageRange,
+          });
+          alert("Preferences saved! Redirecting to matchmaking...");
+          window.location.href = "matchmaking.html";
+        } catch (err) {
+          console.error("Error saving preferences:", err);
+          alert("Failed to save preferences.");
+        }
       } else {
-        studentOutsiderDetails.style.display = "none";
-        outsiderDetails.style.display = "block";
+        alert("Please log in first.");
+        window.location.href = "login.html";
       }
     });
-
-    youAre.addEventListener("change", () => {
-      lookingForBaby.style.display = (youAre.value === "mubaba" || youAre.value === "mumama") ? "block" : "none";
-    });
-
-    function submitPreferences() {
-      // You can collect data and send to Firestore here
-      alert("Preferences submitted!");
-    }
-  </script>
-</body>
-</html>
+  });
+</script>

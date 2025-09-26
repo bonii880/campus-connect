@@ -1,38 +1,122 @@
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-  import { firebaseConfig } from "./firebase.js";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Match Preferences - CampusConnect</title>
+  <style>
+    body {
+      background-color: #1e1e2f;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      padding: 30px;
+    }
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const auth = getAuth(app);
+    h1 {
+      text-align: center;
+      color: #ffa600;
+    }
 
-  document.getElementById("prefForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+    form {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #2b2b3d;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    }
 
-    const matchType = document.getElementById("matchType").value;
-    const campus = document.getElementById("preferredCampus").value;
-    const ageRange = document.getElementById("preferredAge").value;
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+    }
 
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        try {
-          await setDoc(doc(db, "preferences", user.uid), {
-            matchType,
-            campus,
-            ageRange,
-          });
-          alert("Preferences saved! Redirecting to matchmaking...");
-          window.location.href = "matchmaking.html";
-        } catch (err) {
-          console.error("Error saving preferences:", err);
-          alert("Failed to save preferences.");
+    input[type="text"], select {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: #3a3a4f;
+      color: #fff;
+      margin-top: 5px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 25px;
+      background-color: #ffa600;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #ff8800;
+    }
+  </style>
+</head>
+<body>
+  <h1>Set Your Match Preferences</h1>
+
+  <form id="prefForm">
+    <label>Looking for:</label>
+    <select id="matchType" required>
+      <option value="">-- Select --</option>
+      <option value="Friends">Friends</option>
+      <option value="Relationship">Relationship</option>
+      <option value="Casual">Casual</option>
+    </select>
+
+    <label>Preferred Campus:</label>
+    <input type="text" id="preferredCampus" placeholder="e.g. Chuka Main, KMTC Kisumu" required>
+
+    <label>Preferred Age Range:</label>
+    <input type="text" id="preferredAge" placeholder="e.g. 20-25" required>
+
+    <button type="submit">Save Preferences</button>
+  </form>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import { firebaseConfig } from "./firebase.js";
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    document.getElementById("prefForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const matchType = document.getElementById("matchType").value;
+      const campus = document.getElementById("preferredCampus").value;
+      const ageRange = document.getElementById("preferredAge").value;
+
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          try {
+            await setDoc(doc(db, "preferences", user.uid), {
+              matchType,
+              campus,
+              ageRange,
+            });
+            alert("Preferences saved! Redirecting to matchmaking...");
+            window.location.href = "matchmaking.html";
+          } catch (err) {
+            console.error("Error saving preferences:", err);
+            alert("Failed to save preferences.");
+          }
+        } else {
+          alert("Please log in first.");
+          window.location.href = "login.html";
         }
-      } else {
-        alert("Please log in first.");
-        window.location.href = "login.html";
-      }
+      });
     });
-  });
-</script>
+  </script>
+</body>
+</html>

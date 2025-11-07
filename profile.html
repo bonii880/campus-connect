@@ -1,245 +1,118 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Complete Your Profile</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #1e1e2f;
-      color: #fff;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 30px auto;
-      padding: 30px;
-      background-color: #2b2b3d;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.4);
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 25px;
-      color: #ffa600;
-    }
-
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: 600;
-    }
-
-    input[type="text"],
-    input[type="number"],
-    input[type="file"],
-    input[type="tel"],
-    input[type="email"],
-    textarea,
-    select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 8px;
-      border: none;
-      background-color: #3a3a4f;
-      color: #fff;
-    }
-
-    textarea {
-      height: 100px;
-      resize: vertical;
-    }
-
-    .row {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .row > div {
-      flex: 1;
-      min-width: 250px;
-    }
-
-    .section-title {
-      margin-top: 30px;
-      font-size: 1.3em;
-      color: #ffa600;
-      border-bottom: 1px solid #ffa600;
-      padding-bottom: 5px;
-    }
-
-    button {
-      margin-top: 25px;
-      padding: 12px 25px;
-      background-color: #ffa600;
-      border: none;
-      color: #000;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #ff8800;
-    }
-  </style>
+  <title>Set Up Your Profile</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Complete Your Profile</h1>
-    <form id="profileForm">
-      <label>Full Name</label>
-      <input type="text" placeholder="e.g. John Doe" required>
+  <h2>Set Up Your Profile</h2>
 
-      <div class="row">
-        <div>
-          <label>Upload Profile Picture (1 of 2)</label>
-          <input type="file" accept="image/*">
-        </div>
-        <div>
-          <label>Upload Profile Picture (2 of 2)</label>
-          <input type="file" accept="image/*">
-        </div>
-      </div>
+  <form id="profileForm">
+    <label>Full Name:</label>
+    <input type="text" id="name" required><br>
 
-      <div class="row">
-        <div>
-          <label>Age</label>
-          <input type="number" min="16" max="100" required>
-        </div>
-        <div>
-          <label>Gender</label>
-          <select>
-            <option>Select Gender</option>
-            <option>Male</option>
-            <option>Female</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div>
-          <label>Are you a student?</label>
-          <select id="isStudent">
-            <option value="yes">Yes</option>
-            <option value="no">No (Outsider)</option>
-          </select>
-        </div>
-      </div>
+    <label>Age:</label>
+    <input type="number" id="age" required><br>
 
-      <div class="row student-only">
-        <div>
-          <label>University</label>
-          <input type="text" placeholder="e.g. Chuka University">
-        </div>
-        <div>
-          <label>University Campus</label>
-          <input type="text" placeholder="e.g. Nairobi Campus">
-        </div>
-      </div>
+    <label>Gender:</label>
+    <select id="gender" required>
+      <option value="">Select</option>
+      <option>Male</option>
+      <option>Female</option>
+      <option>Other</option>
+    </select><br>
 
-      <div class="row student-only">
-        <div>
-          <label>College</label>
-          <input type="text" placeholder="e.g. KMTC, TVET...">
-        </div>
-        <div>
-          <label>College Campus</label>
-          <input type="text" placeholder="e.g. Kisumu Campus">
-        </div>
-      </div>
+    <label>User Type:</label>
+    <select id="userType" required>
+      <option value="">Select</option>
+      <option value="student">Student</option>
+      <option value="outsider">Outsider</option>
+    </select><br>
 
-      <div class="row student-only">
-        <div>
-          <label>Year of Study</label>
-          <input type="text" placeholder="e.g. 3rd Year">
-        </div>
-        <div>
-          <label>Course</label>
-          <input type="text" placeholder="e.g. Computer Science">
-        </div>
-      </div>
+    <!-- Only for students -->
+    <div id="studentFields" style="display:none;">
+      <label>Campus:</label>
+      <input type="text" id="campus"><br>
+      <label>Course:</label>
+      <input type="text" id="course"><br>
+    </div>
 
-      <label>Interests / Hobbies</label>
-      <input type="text" placeholder="e.g. Music, Coding, Travelling">
+    <!-- Only for outsiders -->
+    <div id="outsiderFields" style="display:none;">
+      <label>Occupation:</label>
+      <input type="text" id="occupation"><br>
+      <label>Company/Organization:</label>
+      <input type="text" id="company"><br>
+    </div>
 
-      <label>Bio / About Me</label>
-      <textarea placeholder="Tell others something interesting about you..."></textarea>
+    <label>Hobbies:</label>
+    <input type="text" id="hobbies" placeholder="e.g., football, music, coding"><br>
 
-      <div class="section-title">Optional Preferences</div>
+    <label>What do you like in a partner?</label>
+    <input type="text" id="likes" placeholder="e.g., honest, funny, smart"><br>
 
-      <div class="row">
-        <div>
-          <label>Preferred Age Range</label>
-          <input type="text" placeholder="e.g., 20-26">
-        </div>
-        <div>
-          <label>Looking for</label>
-          <select>
-            <option>Select</option>
-            <option>Friends</option>
-            <option>Relationship</option>
-            <option>Casual</option>
-          </select>
-        </div>
-      </div>
+    <label>Preferred Age Range:</label>
+    <input type="text" id="preferredAge" placeholder="e.g., 20–25"><br>
 
-      <div class="row">
-        <div>
-          <label>Phone Number (optional)</label>
-          <input type="tel" placeholder="+2547XXXXXXX">
-        </div>
-        <div>
-          <label>Instagram / Twitter Handle</label>
-          <input type="text" placeholder="@username">
-        </div>
-      </div>
+    <label>Upload Profile Picture:</label>
+    <input type="file" id="profilePic" accept="image/*"><br><br>
 
-      <button type="submit">Save Profile</button>
-    </form>
-  </div>
+    <button type="submit">Save Profile</button>
+  </form>
 
-  <script>
-    // Toggle visibility of student-only fields
-    const studentSelect = document.getElementById('isStudent');
-    const studentFields = document.querySelectorAll('.student-only');
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
 
-    function toggleStudentFields() {
-      if (studentSelect.value === 'no') {
-        studentFields.forEach(field => field.style.display = 'none');
-      } else {
-        studentFields.forEach(field => field.style.display = 'flex');
-      }
-    }
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID"
+    };
 
-    studentSelect.addEventListener('change', toggleStudentFields);
-    toggleStudentFields(); // Initial check
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
 
-    // Handle form submission and redirect
-    document.getElementById('profileForm').addEventListener('submit', function(e) {
-      e.preventDefault(); // Prevent actual form submit
+    // Toggle fields for student/outsider
+    const userTypeSelect = document.getElementById("userType");
+    userTypeSelect.addEventListener("change", () => {
+      document.getElementById("studentFields").style.display = userTypeSelect.value === "student" ? "block" : "none";
+      document.getElementById("outsiderFields").style.display = userTypeSelect.value === "outsider" ? "block" : "none";
+    });
 
-      alert("Profile saved! Redirecting...");
+    // Handle form submission
+    const form = document.getElementById("profileForm");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-      // Redirect to matchmaking or next page
-      window.location.href = "matchmaking.html"; // You can change this to any next page
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+          alert("You must be logged in!");
+          window.location.href = "login.html";
+          return;
+        }
+
+        const userData = {
+          name: document.getElementById("name").value,
+          age: document.getElementById("age").value,
+          gender: document.getElementById("gender").value,
+          userType: document.getElementById("userType").value,
+          campus: document.getElementById("campus").value,
+          course: document.getElementById("course").value,
+          occupation: document.getElementById("occupation").value,
+          company: document.getElementById("company").value,
+          hobbies: document.getElementById("hobbies").value,
+          likes: document.getElementById("likes").value,
+          preferredAge: document.getElementById("preferredAge").value,
+        };
+
+        await setDoc(doc(db, "users", user.uid), userData);
+        alert("Profile saved successfully!");
+        window.location.href = "match-preferences.html";
+      });
     });
   </script>
 </body>
 </html>
-<script type="module">
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
-
-  const auth = getAuth();
-  onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      // Not logged in → send back to login
-      window.location.href = "login.html";
-    } else {
-      console.log("Logged in as:", user.email);
-    }
-  });
-</script>

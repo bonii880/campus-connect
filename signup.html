@@ -3,9 +3,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sign Up - CampusConnect</title>
-  <link rel="stylesheet" href="styles.css" />
   <style>
     body {
       background-color: black;
@@ -55,6 +54,10 @@
       color: #ccc;
       margin-top: 15px;
     }
+    a {
+      color: #ff4da6;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
@@ -66,8 +69,7 @@
       <button type="submit">Sign Up</button>
     </form>
     <div class="note">
-      Already have an account?
-      <a href="login.html" style="color: #ff4da6;">Login here</a>
+      Already have an account? <a href="login.html">Login here</a>
     </div>
   </div>
 
@@ -75,13 +77,18 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
 
-    // 🔧 Replace with your real Firebase config
+    // ✅ Your real Firebase configuration
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
+      apiKey: "AIzaSyARcZM2zSy4Xw5Q7Fn_XNX9zDh2LMAQvqw",
+      authDomain: "campusconnect-44ec3.firebaseapp.com",
+      projectId: "campusconnect-44ec3",
+      storageBucket: "campusconnect-44ec3.firebasestorage.app",
+      messagingSenderId: "440410311105",
+      appId: "1:440410311105:web:0bb84ca67f0407235d4740",
+      measurementId: "G-JZ8R9VS9QC"
     };
 
+    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
@@ -100,7 +107,7 @@
 
         if (user) {
           alert("✅ Signup successful! Please complete your profile.");
-          window.location.href = "credentials.html"; // Move to profile completion page
+          window.location.href = "credentials.html"; // redirect to next page
         }
       } catch (error) {
         console.error("Error:", error.code, error.message);

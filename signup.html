@@ -1,123 +1,121 @@
+<!-- signup.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>CampusConnect | Sign In</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Firebase App (the core Firebase SDK) -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDte9Kkm6OF1o3hm3J-CNaRpcH7yJgmgns",
-      authDomain: "campusconnect-176c0.firebaseapp.com",
-      projectId: "campusconnect-176c0",
-      storageBucket: "campusconnect-176c0.appspot.com",
-      messagingSenderId: "835848840763",
-      appId: "1:835848840763:web:e6750d9367e51dc78ede1e",
-      measurementId: "G-YXJ85MPK4N"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-
-    document.getElementById("signin-btn").addEventListener("click", function () {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          window.location.href = "profile.html";
-        })
-        .catch((error) => {
-          alert("Error: " + error.message);
-        });
-    });
-
-    document.getElementById("google-signin").addEventListener("click", function () {
-      signInWithPopup(auth, provider)
-        .then(() => {
-          window.location.href = "profile.html";
-        })
-        .catch((error) => {
-          alert("Google Sign-In Failed: " + error.message);
-        });
-    });
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        window.location.href = "profile.html";
-      }
-    });
-  </script>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up - CampusConnect</title>
+  <link rel="stylesheet" href="styles.css" />
   <style>
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #111;
+      background-color: black;
       color: white;
+      font-family: Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
     }
-
-    .container {
-      background-color: #222;
+    .signup-container {
+      background-color: rgba(255, 255, 255, 0.05);
       padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #ff4da6;
+      border-radius: 15px;
       width: 100%;
       max-width: 400px;
       text-align: center;
     }
-
     h2 {
       color: #ff4da6;
       margin-bottom: 20px;
     }
-
     input {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin: 10px 0;
       border: none;
-      border-radius: 5px;
+      border-radius: 10px;
+      font-size: 1rem;
     }
-
     button {
       background-color: #ff4da6;
       color: white;
       border: none;
-      padding: 10px 20px;
-      margin-top: 10px;
-      border-radius: 5px;
+      padding: 12px 20px;
+      margin-top: 15px;
+      font-size: 1.1rem;
+      border-radius: 25px;
       cursor: pointer;
       width: 100%;
     }
-
     button:hover {
       background-color: #e60073;
     }
-
-    .google-btn {
-      background-color: #4285F4;
-    }
-
-    .google-btn:hover {
-      background-color: #357ae8;
+    .note {
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Sign In to CampusConnect</h2>
-    <input type="email" id="email" placeholder="Email" required />
-    <input type="password" id="password" placeholder="Password" required />
-    <button id="signin-btn">Sign In</button>
-    <button class="google-btn" id="google-signin">Sign In with Google</button>
+  <div class="signup-container">
+    <h2>Create Your Account</h2>
+    <form id="signup-form">
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password (min 6 chars)" required />
+      <button type="submit">Sign Up</button>
+    </form>
+    <div class="note">
+      Already have an account?
+      <a href="login.html" style="color: #ff4da6;">Login here</a>
+    </div>
   </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+
+    // 🔧 Replace with your real Firebase config
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // 🎯 Handle signup
+    const signupForm = document.getElementById("signup-form");
+
+    signupForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        if (user) {
+          alert("✅ Signup successful! Please complete your profile.");
+          window.location.href = "credentials.html"; // Move to profile completion page
+        }
+      } catch (error) {
+        console.error("Error:", error.code, error.message);
+
+        if (error.code === "auth/email-already-in-use") {
+          alert("❌ Email already in use. Try logging in instead.");
+        } else if (error.code === "auth/invalid-email") {
+          alert("❌ Invalid email format.");
+        } else if (error.code === "auth/weak-password") {
+          alert("❌ Password too weak. Use at least 6 characters.");
+        } else {
+          alert("Signup failed: " + error.message);
+        }
+      }
+    });
+  </script>
 </body>
 </html>

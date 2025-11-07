@@ -2,83 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sign Up - CampusConnect</title>
-  <style>
-    body {
-      background-color: black;
-      color: white;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .signup-container {
-      background-color: rgba(255, 255, 255, 0.05);
-      padding: 30px;
-      border-radius: 15px;
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-    }
-    h2 {
-      color: #ff4da6;
-      margin-bottom: 20px;
-    }
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 10px;
-      font-size: 1rem;
-    }
-    button {
-      background-color: #ff4da6;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      margin-top: 15px;
-      font-size: 1.1rem;
-      border-radius: 25px;
-      cursor: pointer;
-      width: 100%;
-    }
-    button:hover {
-      background-color: #e60073;
-    }
-    .note {
-      font-size: 0.9rem;
-      color: #ccc;
-      margin-top: 15px;
-    }
-  </style>
-</head>
-<body>
-  <div class="signup-container">
-    <h2>Create Account</h2>
-    <form id="signup-form">
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <button type="submit">Sign Up</button>
-    </form>
-    <div class="note">Already have an account? 
-      <a href="login.html" style="color: #ff4da6;">Login</a>
-    </div>
-  </div>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CampusConnect - Sign Up</title>
   <script type="module">
-    // Import Firebase
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+    // Import Firebase SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-    // Your Firebase config
+    // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyARcZM2zSy4Xw5Q7Fn_XNX9zDh2LMAQvqw",
       authDomain: "campusconnect-44ec3.firebaseapp.com",
       projectId: "campusconnect-44ec3",
-      storageBucket: "campusconnect-44ec3.firebasestorage.app",
+      storageBucket: "campusconnect-44ec3.appspot.com",
       messagingSenderId: "440410311105",
       appId: "1:440410311105:web:0bb84ca67f0407235d4740",
       measurementId: "G-JZ8R9VS9QC"
@@ -89,21 +25,25 @@
     const auth = getAuth(app);
 
     // Handle signup
-    const signupForm = document.getElementById("signup-form");
-    signupForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    window.signup = async function () {
       const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
+      const password = document.getElementById("password").value.trim();
 
       try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        alert("✅ Signup successful! Now complete your profile.");
-        window.location.href = "welcome.html";
+        await createUserWithEmailAndPassword(auth, email, password);
+        alert("Signup successful!");
+        window.location.href = "welcome.html"; // redirect after signup
       } catch (error) {
-        console.error("Signup Error:", error.code, error.message);
         alert("Signup failed: " + error.message);
       }
-    });
+    };
   </script>
+</head>
+<body>
+  <h2>CampusConnect - Sign Up</h2>
+  <input type="email" id="email" placeholder="Enter Email" required /><br /><br />
+  <input type="password" id="password" placeholder="Enter Password" required /><br /><br />
+  <button onclick="signup()">Sign Up</button><br /><br />
+  <p>Already have an account? <a href="login.html">Login here</a></p>
 </body>
 </html>

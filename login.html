@@ -73,7 +73,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     // 🔧 Replace these with your actual Firebase credentials
     const firebaseConfig = {
@@ -116,12 +116,12 @@
       }
     });
 
-    // 🔁 Optional: If user already logged in, skip login
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        window.location.href = "credentials.html";
-      }
-    });
+    // ✅ Auto-redirect removed to stop skipping the login step
+    // onAuthStateChanged(auth, (user) => {
+    //   if (user) {
+    //     window.location.href = "credentials.html";
+    //   }
+    // });
   </script>
 </body>
 </html>

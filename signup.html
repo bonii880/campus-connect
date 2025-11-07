@@ -1,93 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign Up - CampusConnect</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusConnect - Sign Up</title>
   <style>
     body {
-      background-color: #000;
+      background-color: black;
       color: white;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      text-align: center;
+      font-family: 'Poppins', sans-serif;
     }
     .container {
-      text-align: center;
-      background-color: rgba(255,255,255,0.05);
-      padding: 30px;
-      border-radius: 15px;
-      width: 100%;
-      max-width: 400px;
-    }
-    h2 {
-      color: #ff4da6;
+      margin-top: 100px;
     }
     input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: none;
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
       border-radius: 10px;
+      border: none;
+      width: 250px;
     }
     button {
-      width: 100%;
-      padding: 12px;
-      background-color: #ff4da6;
+      background-color: #ff4fc0;
       color: white;
       border: none;
-      border-radius: 25px;
-      font-size: 1rem;
+      border-radius: 10px;
+      padding: 10px 20px;
       cursor: pointer;
     }
     button:hover {
-      background-color: #e60073;
-    }
-    a {
-      color: #ff4da6;
+      background-color: #ff75d8;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>Create Account</h2>
-    <input type="email" id="email" placeholder="Email" required />
-    <input type="password" id="password" placeholder="Password" required />
-    <button onclick="signup()">Sign Up</button>
-    <p>Already have an account? <a href="login.html">Login</a></p>
+    <h1>Sign Up</h1>
+    <form id="signup-form">
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Sign Up</button>
+    </form>
+    <p>Already have an account? <a href="login.html" style="color:#ff4fc0;">Login here</a></p>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyARcZM2zSy4Xw5Q7Fn_XNX9zDh2LMAQvqw",
-      authDomain: "campusconnect-44ec3.firebaseapp.com",
-      projectId: "campusconnect-44ec3",
-      storageBucket: "campusconnect-44ec3.appspot.com",
-      messagingSenderId: "440410311105",
-      appId: "1:440410311105:web:0bb84ca67f0407235d4740",
-      measurementId: "G-JZ8R9VS9QC"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    window.signup = async function () {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-
-      try {
-        await createUserWithEmailAndPassword(auth, email, password);
-        alert("✅ Account created successfully!");
-        window.location.href = "complete-profile.html";
-      } catch (error) {
-        alert("Signup failed: " + error.message);
-      }
-    };
-  </script>
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="signup.js"></script>
 </body>
 </html>

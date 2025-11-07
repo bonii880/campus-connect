@@ -23,4 +23,33 @@ profileForm.addEventListener("submit", async (e) => {
   const course = document.getElementById("course").value.trim();
   const preferredAge = document.getElementById("preferredAge").value;
   const hobbies = document.getElementById("hobbies").value.trim();
-  const file = d
+  const file = document.getElementById("profilePic").files[0];
+
+  try {
+    let photoURL = "";
+    if (file) {
+      const storageRef = ref(storage, `profiles/${user.uid}/${file.name}`);
+      await uploadBytes(storageRef, file);
+      photoURL = await getDownloadURL(storageRef);
+    }
+
+    await setDoc(doc(db, "users", user.uid), {
+      name,
+      age,
+      gender,
+      status,
+      course,
+      preferredAge,
+      hobbies,
+      photoURL,
+      email: user.email,
+      createdAt: new Date()
+    });
+
+    alert("Profile saved successfully ✅");
+    window.location.href = "home.html"; // Redirect to main page
+  } catch (error) {
+    console.error("Error saving profile:", error);
+    alert("Error saving profile: " + error.message);
+  }
+});

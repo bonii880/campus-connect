@@ -1,9 +1,8 @@
-<!-- signup.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sign Up - CampusConnect</title>
   <style>
     body {
@@ -54,30 +53,27 @@
       color: #ccc;
       margin-top: 15px;
     }
-    a {
-      color: #ff4da6;
-      text-decoration: none;
-    }
   </style>
 </head>
 <body>
   <div class="signup-container">
-    <h2>Create Your Account</h2>
+    <h2>Create Account</h2>
     <form id="signup-form">
       <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Password (min 6 chars)" required />
+      <input type="password" id="password" placeholder="Password" required />
       <button type="submit">Sign Up</button>
     </form>
-    <div class="note">
-      Already have an account? <a href="login.html">Login here</a>
+    <div class="note">Already have an account? 
+      <a href="login.html" style="color: #ff4da6;">Login</a>
     </div>
   </div>
 
   <script type="module">
+    // Import Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
 
-    // ✅ Your real Firebase configuration
+    // Your Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyARcZM2zSy4Xw5Q7Fn_XNX9zDh2LMAQvqw",
       authDomain: "campusconnect-44ec3.firebaseapp.com",
@@ -92,35 +88,20 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // 🎯 Handle signup
+    // Handle signup
     const signupForm = document.getElementById("signup-form");
-
     signupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
 
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-
-        if (user) {
-          alert("✅ Signup successful! Please complete your profile.");
-          window.location.href = "credentials.html"; // redirect to next page
-        }
+        alert("✅ Signup successful! Now complete your profile.");
+        window.location.href = "welcome.html";
       } catch (error) {
-        console.error("Error:", error.code, error.message);
-
-        if (error.code === "auth/email-already-in-use") {
-          alert("❌ Email already in use. Try logging in instead.");
-        } else if (error.code === "auth/invalid-email") {
-          alert("❌ Invalid email format.");
-        } else if (error.code === "auth/weak-password") {
-          alert("❌ Password too weak. Use at least 6 characters.");
-        } else {
-          alert("Signup failed: " + error.message);
-        }
+        console.error("Signup Error:", error.code, error.message);
+        alert("Signup failed: " + error.message);
       }
     });
   </script>

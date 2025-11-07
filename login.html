@@ -60,59 +60,68 @@
 <body>
   <div class="login-container">
     <h2>Login to CampusConnect</h2>
-    <form action="welcome.html" method="GET">
-      <input type="email" placeholder="Email" required />
-      <input type="password" placeholder="Password" required />
+    <form id="login-form">
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
       <button type="submit">Login</button>
     </form>
-    <div class="note">Don't have an account? <a href="signup.html" style="color: #ff4da6;">Sign up here</a></div>
+    <div class="note">
+      Don't have an account?
+      <a href="signup.html" style="color: #ff4da6;">Sign up here</a>
+    </div>
   </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    // 🔧 Replace these with your actual Firebase credentials
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // 🚀 Handle login form submission
+    const loginForm = document.getElementById("login-form");
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        if (user) {
+          alert("✅ Login successful!");
+          window.location.href = "credentials.html"; // redirect to your next page
+        }
+      } catch (error) {
+        console.error("Error:", error.code, error.message);
+
+        if (error.code === "auth/user-not-found") {
+          alert("❌ No account found for this email. Please sign up first.");
+        } else if (error.code === "auth/wrong-password") {
+          alert("❌ Wrong password. Please try again.");
+        } else if (error.code === "auth/invalid-email") {
+          alert("❌ Invalid email format.");
+        } else {
+          alert("❌ " + error.message);
+        }
+      }
+    });
+
+    // 🔁 Optional: If user already logged in, skip login
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.location.href = "credentials.html";
+      }
+    });
+  </script>
 </body>
 </html>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
-
-  // 🔧 Your Firebase config (keep your own values)
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  // 🎯 Handle login
-  const loginForm = document.getElementById("login-form");
-  loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      if (user) {
-        alert("Login successful ✅");
-        window.location.href = "welcome.html"; // redirect to profile setup
-      }
-    } catch (error) {
-      console.error("Error:", error.code, error.message);
-
-      if (error.code === "auth/user-not-found") {
-        alert("❌ No account found for this email. Please sign up first.");
-      } else if (error.code === "auth/wrong-password") {
-        alert("❌ Wrong password. Please try again.");
-      } else if (error.code === "auth/invalid-email") {
-        alert("❌ Invalid email format.");
-      } else {
-        alert("Login failed: " + error.message);
-      }
-    }
-  });
-</script>

@@ -13,11 +13,10 @@
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #ffb6c1, #ff69b4, #ffc0cb);
       min-height: 100vh;
-      overflow-y: auto; /* ✅ allow scrolling */
+      overflow-y: auto;
       position: relative;
     }
 
-    /* floating hearts animation */
     .heart {
       position: fixed;
       color: rgba(255, 255, 255, 0.3);
@@ -37,7 +36,7 @@
       box-shadow: 0 0 20px rgba(255, 105, 180, 0.5);
       padding: 30px;
       width: 90%;
-      max-width: 450px;
+      max-width: 500px;
       text-align: center;
       margin: 60px auto;
       position: relative;
@@ -87,6 +86,15 @@
       font-size: 13px;
       color: #555;
     }
+
+    .section {
+      display: none;
+      text-align: left;
+    }
+
+    .section.active {
+      display: block;
+    }
   </style>
 </head>
 
@@ -100,20 +108,32 @@
 
   <div class="container">
     <h1>Complete Your Profile</h1>
-    <p>Let's help you find your perfect connection 💌</p>
+    <p>Let’s help you find your perfect connection 💌</p>
 
-    <select id="userType">
+    <select id="userType" onchange="toggleSection()">
       <option value="student">🎓 Student</option>
       <option value="outsider">🌍 Outsider</option>
     </select>
 
+    <!-- Shared fields -->
     <input type="text" id="name" placeholder="Your Full Name" />
     <input type="number" id="age" placeholder="Your Age" />
     <input type="number" id="preferredAge" placeholder="Preferred Age Range" />
-    <input type="text" id="university" placeholder="Your University (if student)" />
-    <input type="text" id="course" placeholder="Your Course (if student)" />
     <textarea id="hobbies" rows="3" placeholder="Your Hobbies or What You Like"></textarea>
     <input type="file" id="profilePic" accept="image/*" />
+
+    <!-- Student Section -->
+    <div id="studentSection" class="section active">
+      <input type="text" id="university" placeholder="Your University" />
+      <input type="text" id="course" placeholder="Your Course" />
+    </div>
+
+    <!-- Outsider Section -->
+    <div id="outsiderSection" class="section">
+      <input type="text" id="occupation" placeholder="Your Occupation" />
+      <input type="text" id="city" placeholder="Your City" />
+      <textarea id="about" rows="3" placeholder="Tell us something interesting about you"></textarea>
+    </div>
 
     <button onclick="saveProfile()">Save My Profile 💘</button>
 
@@ -148,6 +168,12 @@
       }
     });
 
+    window.toggleSection = function() {
+      const userType = document.getElementById("userType").value;
+      document.getElementById("studentSection").classList.toggle("active", userType === "student");
+      document.getElementById("outsiderSection").classList.toggle("active", userType === "outsider");
+    };
+
     async function saveProfile() {
       const user = auth.currentUser;
       if (!user) return alert("You must be logged in.");
@@ -155,31 +181,29 @@
       const name = document.getElementById("name").value;
       const age = document.getElementById("age").value;
       const preferredAge = document.getElementById("preferredAge").value;
-      const university = document.getElementById("university").value;
-      const course = document.getElementById("course").value;
       const hobbies = document.getElementById("hobbies").value;
       const userType = document.getElementById("userType").value;
       const profilePic = document.getElementById("profilePic").files[0];
+      let data = { uid: user.uid, name, age, preferredAge, hobbies, userType };
+
+      if (userType === "student") {
+        data.university = document.getElementById("university").value;
+        data.course = document.getElementById("course").value;
+      } else {
+        data.occupation = document.getElementById("occupation").value;
+        data.city = document.getElementById("city").value;
+        data.about = document.getElementById("about").value;
+      }
 
       let photoURL = "";
       if (profilePic) {
         const storageRef = ref(storage, `profiles/${user.uid}.jpg`);
         await uploadBytes(storageRef, profilePic);
         photoURL = await getDownloadURL(storageRef);
+        data.photoURL = photoURL;
       }
 
-      await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
-        name,
-        age,
-        preferredAge,
-        university,
-        course,
-        hobbies,
-        userType,
-        photoURL
-      });
-
+      await setDoc(doc(db, "users", user.uid), data);
       alert("💖 Profile saved successfully! Welcome to Campus Connect!");
       window.location.href = "home.html";
     }

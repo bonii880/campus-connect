@@ -12,20 +12,18 @@
       margin: 0;
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #ffb6c1, #ff69b4, #ffc0cb);
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
+      min-height: 100vh;
+      overflow-y: auto; /* ✅ allow scrolling */
       position: relative;
     }
 
     /* floating hearts animation */
     .heart {
-      position: absolute;
+      position: fixed;
       color: rgba(255, 255, 255, 0.3);
       font-size: 24px;
       animation: float 10s infinite ease-in-out;
+      z-index: 1;
     }
 
     @keyframes float {
@@ -41,7 +39,9 @@
       width: 90%;
       max-width: 450px;
       text-align: center;
-      z-index: 10;
+      margin: 60px auto;
+      position: relative;
+      z-index: 5;
     }
 
     h1 {
@@ -121,13 +121,11 @@
   </div>
 
   <script type="module">
-    // Firebase imports
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
     import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js";
 
-    // Your Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyARcZM2zSy4Xw5Q7Fn_XNX9zDh2LMAQvqw",
       authDomain: "campusconnect-44ec3.firebaseapp.com",
@@ -143,7 +141,6 @@
     const db = getFirestore(app);
     const storage = getStorage(app);
 
-    // Only allow if logged in
     onAuthStateChanged(auth, user => {
       if (!user) {
         alert("Please log in first!");
@@ -184,7 +181,7 @@
       });
 
       alert("💖 Profile saved successfully! Welcome to Campus Connect!");
-      window.location.href = "home.html"; // redirect after saving
+      window.location.href = "home.html";
     }
 
     window.saveProfile = saveProfile;

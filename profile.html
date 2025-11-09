@@ -3,75 +3,138 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Create Profile - CampusConnect</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>CampusConnect – Create Profile</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #ff4da6, #1e1e2f);
-      color: #fff;
-      min-height: 100vh;
-      margin: 0;
+      background: radial-gradient(circle at top left, #ff4da6, #05051b 60%);
+      color: white;
       display: flex;
       justify-content: center;
       align-items: center;
+      min-height: 100vh;
+      margin: 0;
       padding: 40px;
       overflow-y: auto;
     }
-    .profile-container {
-      background: rgba(0, 0, 0, 0.5);
-      padding: 30px;
-      border-radius: 20px;
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      border-radius: 30px;
+      padding: 40px;
       width: 100%;
       max-width: 500px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      animation: fadeIn 1s ease;
     }
-    h2 {
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    h1 {
       text-align: center;
       color: #ffb3da;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    h3 {
+      text-align: center;
+      color: #ccc;
+      margin-bottom: 25px;
+      font-weight: 400;
     }
     label {
       display: block;
       margin-top: 15px;
-      font-size: 0.95rem;
-      color: #ffd6eb;
+      font-weight: 500;
+      color: #ffdef0;
     }
     input, select {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
+      margin-top: 6px;
       border: none;
-      border-radius: 10px;
-      margin-top: 5px;
+      border-radius: 15px;
       font-size: 1rem;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      outline: none;
     }
-    button {
-      background-color: #ff4da6;
+    input::file-selector-button {
+      background: #ff4da6;
       color: white;
       border: none;
-      padding: 12px;
-      margin-top: 20px;
-      font-size: 1.1rem;
-      border-radius: 25px;
+      border-radius: 15px;
+      padding: 8px 15px;
       cursor: pointer;
+      margin-right: 10px;
+    }
+    button {
+      margin-top: 25px;
       width: 100%;
+      padding: 15px;
+      background: linear-gradient(90deg, #ff4da6, #ff0080);
+      border: none;
+      border-radius: 30px;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 15px rgba(255, 77, 166, 0.6);
     }
     button:hover {
-      background-color: #e60073;
+      transform: scale(1.03);
+      box-shadow: 0 0 25px rgba(255, 77, 166, 1);
     }
-    .hidden {
+    .type-select {
+      display: flex;
+      justify-content: space-around;
+      margin: 15px 0 25px;
+    }
+    .type-select label {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .type-select input {
       display: none;
+    }
+    .type-select input:checked + label {
+      background: linear-gradient(90deg, #ff4da6, #ff0080);
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 0 15px rgba(255, 77, 166, 0.7);
+    }
+    .hidden { display: none; }
+    .photo-preview {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+      gap: 10px;
+    }
+    .photo-preview img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 2px solid #ff4da6;
     }
   </style>
 </head>
 <body>
-  <div class="profile-container">
-    <h2>Create Your Profile</h2>
+  <div class="card">
+    <h1>💞 CampusConnect</h1>
+    <h3>Create Your Perfect Match Profile</h3>
 
-    <label>User Type:</label>
-    <div>
-      <input type="radio" name="userType" id="student" value="student" checked /> Student
-      <input type="radio" name="userType" id="outsider" value="outsider" /> Outsider
+    <div class="type-select">
+      <input type="radio" id="student" name="userType" value="student" checked />
+      <label for="student">🎓 Student</label>
+      <input type="radio" id="outsider" name="userType" value="outsider" />
+      <label for="outsider">🌎 Outsider</label>
     </div>
 
     <form id="profileForm">
@@ -88,15 +151,16 @@
         <option value="female">Female</option>
       </select>
 
-      <label>Upload Photos (2 max):</label>
+      <label>Upload 2 Photos:</label>
       <input type="file" id="photos" accept="image/*" multiple required />
+      <div class="photo-preview" id="photoPreview"></div>
 
-      <!-- Student Section -->
+      <!-- Student Fields -->
       <div id="studentSection">
         <label>Course:</label>
         <input type="text" id="course" placeholder="e.g., Computer Science" />
 
-        <label>Looking for:</label>
+        <label>Looking For:</label>
         <select id="studentPreference">
           <option value="">Select</option>
           <option value="relationship">Relationship</option>
@@ -114,16 +178,16 @@
         </select>
       </div>
 
-      <!-- Outsider Section -->
+      <!-- Outsider Fields -->
       <div id="outsiderSection" class="hidden">
-        <label>You are a:</label>
+        <label>You Are A:</label>
         <select id="outsiderType">
           <option value="">Select</option>
           <option value="mubaba">Mubaba</option>
           <option value="mumama">Mumama</option>
         </select>
 
-        <label>Looking for:</label>
+        <label>Looking For:</label>
         <select id="outsiderPreference">
           <option value="">Select</option>
           <option value="relationship">Relationship</option>
@@ -136,7 +200,7 @@
         </select>
       </div>
 
-      <button type="submit">Save Profile</button>
+      <button type="submit">💘 Save My Profile</button>
     </form>
   </div>
 
@@ -159,24 +223,38 @@
     const db = getFirestore(app);
     const storage = getStorage(app);
 
-    // toggle between student and outsider
+    const studentSection = document.getElementById("studentSection");
+    const outsiderSection = document.getElementById("outsiderSection");
     document.querySelectorAll('input[name="userType"]').forEach(radio => {
       radio.addEventListener("change", () => {
         const isStudent = document.getElementById("student").checked;
-        document.getElementById("studentSection").classList.toggle("hidden", !isStudent);
-        document.getElementById("outsiderSection").classList.toggle("hidden", isStudent);
+        studentSection.classList.toggle("hidden", !isStudent);
+        outsiderSection.classList.toggle("hidden", isStudent);
+      });
+    });
+
+    const photoInput = document.getElementById("photos");
+    const photoPreview = document.getElementById("photoPreview");
+    photoInput.addEventListener("change", () => {
+      photoPreview.innerHTML = "";
+      [...photoInput.files].slice(0, 2).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          photoPreview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
       });
     });
 
     document.getElementById("profileForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-
       const userType = document.querySelector('input[name="userType"]:checked').value;
-      const fullName = document.getElementById("fullName").value;
+      const fullName = document.getElementById("fullName").value.trim();
       const age = document.getElementById("age").value;
       const gender = document.getElementById("gender").value;
-      const photoFiles = document.getElementById("photos").files;
-
+      const files = photoInput.files;
       let data = { userType, fullName, age, gender, createdAt: new Date() };
 
       if (userType === "student") {
@@ -189,22 +267,21 @@
       }
 
       try {
-        const photoURLs = [];
-        for (let i = 0; i < photoFiles.length && i < 2; i++) {
-          const file = photoFiles[i];
-          const fileRef = ref(storage, `profiles/${fullName}_${file.name}`);
-          await uploadBytes(fileRef, file);
-          const url = await getDownloadURL(fileRef);
-          photoURLs.push(url);
+        const urls = [];
+        for (let i = 0; i < Math.min(files.length, 2); i++) {
+          const refPath = ref(storage, `profiles/${fullName}_${files[i].name}`);
+          await uploadBytes(refPath, files[i]);
+          const url = await getDownloadURL(refPath);
+          urls.push(url);
         }
-        data.photos = photoURLs;
+        data.photos = urls;
 
         await setDoc(doc(db, "users", fullName), data);
-        alert("✅ Profile saved successfully!");
+        alert("💖 Profile Saved Successfully!");
         window.location.href = "matchmaking.html";
-      } catch (error) {
-        alert("❌ Error saving profile: " + error.message);
-        console.error(error);
+      } catch (err) {
+        console.error(err);
+        alert("❌ Error saving profile: " + err.message);
       }
     });
   </script>

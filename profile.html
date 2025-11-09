@@ -1,151 +1,292 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Campus Connect - Create Profile</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CampusConnect — Complete Profile</title>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap');
 
-    body {
-      margin: 0;
+    :root{
+      --pink-1:#ffb6c1;
+      --pink-2:#ff69b4;
+      --accent:#ff1493;
+      --card-bg: rgba(255,255,255,0.95);
+      --muted:#6b6b6b;
+    }
+
+    html,body{height:100%;margin:0;}
+    body{
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #ffb6c1, #ff69b4, #ffc0cb);
-      min-height: 100vh;
-      overflow-y: auto;
-      position: relative;
+      background: linear-gradient(135deg, var(--pink-1), var(--pink-2));
+      -webkit-font-smoothing:antialiased;
+      overflow-y:auto;
+      padding:40px 20px;
+      display:flex;
+      justify-content:center;
     }
 
-    .heart {
-      position: fixed;
-      color: rgba(255, 255, 255, 0.3);
-      font-size: 24px;
-      animation: float 10s infinite ease-in-out;
-      z-index: 1;
+    .page {
+      width:100%;
+      max-width:980px;
+      display:grid;
+      grid-template-columns: 1fr 420px;
+      gap:28px;
+      align-items:start;
     }
 
-    @keyframes float {
-      0% { transform: translateY(100vh) scale(0.8); opacity: 0.6; }
-      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+    /* left: big card for info and buttons */
+    .left {
+      display:flex;
+      flex-direction:column;
+      gap:18px;
     }
 
-    .container {
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(255, 105, 180, 0.5);
-      padding: 30px;
-      width: 90%;
-      max-width: 500px;
-      text-align: center;
-      margin: 60px auto;
-      position: relative;
-      z-index: 5;
+    .hero {
+      background: radial-gradient(circle at 10% 10%, rgba(255,255,255,0.6), rgba(255,255,255,0.3));
+      padding:28px;
+      border-radius:20px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.12);
+      color:#222;
+    }
+    .hero h1{
+      margin:0;
+      font-family:'Great Vibes', cursive;
+      color:var(--accent);
+      font-size:44px;
+      line-height:1;
+    }
+    .hero p{ margin:10px 0 0; color:var(--muted); }
+
+    .choice-row{
+      display:flex;
+      gap:16px;
+      margin-top:18px;
+    }
+    .big-btn{
+      flex:1;
+      padding:18px 14px;
+      border-radius:14px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.78));
+      border: 1px solid rgba(255,255,255,0.6);
+      cursor:pointer;
+      text-align:center;
+      font-weight:600;
+      color:#222;
+      box-shadow: 0 8px 20px rgba(255,105,180,0.12);
+      transition:transform .14s ease, box-shadow .14s ease;
+    }
+    .big-btn:hover{ transform:translateY(-4px); box-shadow:0 16px 40px rgba(255,105,180,0.18); }
+    .big-btn.active{ background:linear-gradient(90deg,var(--accent),var(--pink-2)); color:white; }
+
+    /* right: form card */
+    .card {
+      background: var(--card-bg);
+      padding:22px;
+      border-radius:18px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.12);
+    }
+    .card h2{ margin-top:0; color:var(--accent); font-family:'Great Vibes', cursive; font-size:30px; }
+    .muted{ color:var(--muted); font-size:14px; margin-top:6px; }
+
+    .form-row{ display:flex; gap:12px; }
+    .field{ margin:12px 0; }
+    input[type="text"], input[type="number"], select, textarea {
+      width:100%;
+      padding:10px 12px;
+      border-radius:10px;
+      border:1px solid rgba(255,105,180,0.35);
+      font-size:15px;
+      box-sizing:border-box;
+    }
+    textarea{ resize: vertical; min-height:84px; }
+
+    label.file-label{
+      display:block;
+      padding:10px;
+      border:2px dashed rgba(255,105,180,0.25);
+      border-radius:10px;
+      text-align:center;
+      cursor:pointer;
+      color:#333;
+      background:linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.6));
+    }
+    .small-note{ font-size:13px; color:var(--muted); margin-top:6px; }
+
+    .save-btn{
+      width:100%;
+      padding:12px;
+      border-radius:30px;
+      background: linear-gradient(90deg,var(--accent),var(--pink-2));
+      color:white;
+      border:none;
+      font-weight:700;
+      font-size:16px;
+      cursor:pointer;
+      box-shadow:0 10px 30px rgba(255,20,147,0.12);
+    }
+    .save-btn:hover{ transform:translateY(-3px); }
+
+    .success{ color:green; font-weight:600; margin-top:8px; }
+    .error{ color:#a00; font-weight:600; margin-top:8px; }
+
+    /* responsive: single column on small screens */
+    @media (max-width:980px){
+      .page{ grid-template-columns:1fr; padding-bottom:80px; }
+      .left{ order:2; }
     }
 
-    h1 {
-      font-family: 'Great Vibes', cursive;
-      color: #ff1493;
-      font-size: 42px;
-      margin-bottom: 10px;
-    }
-
-    p {
-      color: #444;
-      margin-bottom: 25px;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ff69b4;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      font-size: 15px;
-    }
-
-    button {
-      background: #ff1493;
-      color: white;
-      border: none;
-      border-radius: 30px;
-      padding: 12px 20px;
-      cursor: pointer;
-      font-size: 16px;
-      box-shadow: 0 0 10px #ff69b4;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background: #ff69b4;
-      box-shadow: 0 0 20px #ff1493;
-    }
-
-    .footer {
-      margin-top: 10px;
-      font-size: 13px;
-      color: #555;
-    }
-
-    .section {
-      display: none;
-      text-align: left;
-    }
-
-    .section.active {
-      display: block;
-    }
   </style>
 </head>
-
 <body>
-  <!-- floating hearts -->
-  <div class="heart" style="left:10%;animation-delay:0s;">💖</div>
-  <div class="heart" style="left:30%;animation-delay:2s;">💘</div>
-  <div class="heart" style="left:50%;animation-delay:4s;">💕</div>
-  <div class="heart" style="left:70%;animation-delay:6s;">💞</div>
-  <div class="heart" style="left:90%;animation-delay:8s;">❤️</div>
+  <div class="page">
+    <!-- LEFT: intro & selection -->
+    <div class="left">
+      <div class="hero">
+        <h1>CampusConnect</h1>
+        <p>Create your matchmaking profile — choose Student or Outsider to begin. Use real photos, be honest, and find meaningful (or spicy) connections.</p>
 
-  <div class="container">
-    <h1>Complete Your Profile</h1>
-    <p>Let’s help you find your perfect connection 💌</p>
+        <div class="choice-row" style="margin-top:18px;">
+          <div id="btn-student" class="big-btn active" onclick="selectType('student')">
+            🎓 I'm a Student
+          </div>
+          <div id="btn-outsider" class="big-btn" onclick="selectType('outsider')">
+            🌍 I'm an Outsider
+          </div>
+        </div>
 
-    <select id="userType" onchange="toggleSection()">
-      <option value="student">🎓 Student</option>
-      <option value="outsider">🌍 Outsider</option>
-    </select>
+        <p class="small-note" style="margin-top:14px;">Students can choose preferences like <strong>Mumama</strong> / <strong>Mubaba</strong>. Outsiders can declare if they are Mumama / Mubaba and choose to look for Sugar Boy / Sugar Girl or other relationship styles.</p>
+      </div>
 
-    <!-- Shared fields -->
-    <input type="text" id="name" placeholder="Your Full Name" />
-    <input type="number" id="age" placeholder="Your Age" />
-    <input type="number" id="preferredAge" placeholder="Preferred Age Range" />
-    <textarea id="hobbies" rows="3" placeholder="Your Hobbies or What You Like"></textarea>
-    <input type="file" id="profilePic" accept="image/*" />
-
-    <!-- Student Section -->
-    <div id="studentSection" class="section active">
-      <input type="text" id="university" placeholder="Your University" />
-      <input type="text" id="course" placeholder="Your Course" />
+      <div class="card" style="margin-top:18px;">
+        <h2>How it works</h2>
+        <p class="muted">After saving, your profile will be stored securely. Photos go to Storage; profile details go to Firestore. Later the matchmaking engine will use these fields to find matches across Students and Outsiders.</p>
+        <ul class="muted" style="padding-left:18px;">
+          <li>Upload <strong>two</strong> photos (recommended)</li>
+          <li>Pick clear preferences for better matches</li>
+          <li>You can later edit your profile from the dashboard</li>
+        </ul>
+      </div>
     </div>
 
-    <!-- Outsider Section -->
-    <div id="outsiderSection" class="section">
-      <input type="text" id="occupation" placeholder="Your Occupation" />
-      <input type="text" id="city" placeholder="Your City" />
-      <textarea id="about" rows="3" placeholder="Tell us something interesting about you"></textarea>
+    <!-- RIGHT: form -->
+    <div class="card" id="formCard">
+      <h2 id="formTitle">Student Profile</h2>
+      <div class="muted">Fill details below — fields marked required should be filled for better matches.</div>
+
+      <!-- shared fields -->
+      <div class="field">
+        <label class="small-note">Full name *</label>
+        <input id="name" type="text" placeholder="Your full name" required />
+      </div>
+
+      <div class="form-row">
+        <div style="flex:1;" class="field">
+          <label class="small-note">Your age *</label>
+          <input id="age" type="number" min="16" placeholder="e.g., 22" />
+        </div>
+        <div style="flex:1;" class="field">
+          <label class="small-note">Preferred partner age range</label>
+          <input id="preferredAge" type="text" placeholder="e.g., 20-26" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="small-note">Hobbies / Interests</label>
+        <textarea id="hobbies" placeholder="e.g., music, coding, parties"></textarea>
+      </div>
+
+      <!-- photo uploads -->
+      <div class="form-row">
+        <div style="flex:1;">
+          <label class="file-label">Photo 1 (click to choose)
+            <input id="photo1" type="file" accept="image/*" style="display:none" />
+          </label>
+        </div>
+        <div style="flex:1;">
+          <label class="file-label">Photo 2 (click to choose)
+            <input id="photo2" type="file" accept="image/*" style="display:none" />
+          </label>
+        </div>
+      </div>
+      <div id="photoNote" class="small-note">Photos are optional but recommended — they are stored in Firebase Storage.</div>
+
+      <!-- STUDENT section -->
+      <div id="studentSection" style="margin-top:12px;">
+        <div class="field">
+          <label class="small-note">University / College</label>
+          <input id="university" type="text" placeholder="Your institution (if any)" />
+        </div>
+        <div class="field">
+          <label class="small-note">Course / Program</label>
+          <input id="course" type="text" placeholder="e.g., Computer Science" />
+        </div>
+
+        <div class="field">
+          <label class="small-note">Preferences (choose best fit)</label>
+          <select id="studentPreference">
+            <option value="">-- Choose preference --</option>
+            <option value="relationship">Relationship</option>
+            <option value="friendship">Friendship</option>
+            <option value="one_night">One-night stand</option>
+            <option value="fwb">Friends with benefits</option>
+            <option value="mumama">Mumama (older woman)</option>
+            <option value="mubaba">Mubaba (older man)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- OUTSIDER section (hidden by default) -->
+      <div id="outsiderSection" style="display:none; margin-top:12px;">
+        <div class="field">
+          <label class="small-note">Occupation</label>
+          <input id="occupation" type="text" placeholder="e.g., Engineer, Business Owner" />
+        </div>
+        <div class="field">
+          <label class="small-note">City / Location</label>
+          <input id="city" type="text" placeholder="e.g., Nairobi" />
+        </div>
+
+        <div class="field">
+          <label class="small-note">I am (choose)</label>
+          <select id="outsiderIdentity">
+            <option value="">-- I am --</option>
+            <option value="mubaba">Mubaba (older man)</option>
+            <option value="mumama">Mumama (older woman)</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="small-note">Looking for</label>
+          <select id="outsiderLooking">
+            <option value="">-- Looking for --</option>
+            <option value="relationship">Relationship</option>
+            <option value="friendship">Friendship</option>
+            <option value="one_night">One-night stand</option>
+            <option value="fwb">Friends with benefits</option>
+            <option value="sugar_boy">Sugar Boy</option>
+            <option value="sugar_girl">Sugar Girl</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-top:18px;">
+        <button class="save-btn" onclick="saveProfile()">Save Profile & Continue</button>
+        <div id="statusMsg"></div>
+      </div>
     </div>
-
-    <button onclick="saveProfile()">Save My Profile 💘</button>
-
-    <div class="footer">Campus Connect © 2025</div>
   </div>
 
   <script type="module">
+    // Firebase imports
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js";
 
+    // ===== your firebase config (already provided) =====
     const firebaseConfig = {
       apiKey: "AIzaSyARcZM2zSy4Xw5Q7Fn_XNX9zDh2LMAQvqw",
       authDomain: "campusconnect-44ec3.firebaseapp.com",
@@ -156,59 +297,164 @@
       measurementId: "G-JZ8R9VS9QC"
     };
 
+    // initialize
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
     const storage = getStorage(app);
 
+    // UI elements
+    const btnStudent = document.getElementById('btn-student');
+    const btnOutsider = document.getElementById('btn-outsider');
+    const formTitle = document.getElementById('formTitle');
+    const studentSection = document.getElementById('studentSection');
+    const outsiderSection = document.getElementById('outsiderSection');
+    const statusMsg = document.getElementById('statusMsg');
+
+    // default type
+    let chosenType = 'student';
+    function selectType(type){
+      chosenType = type;
+      if(type === 'student'){
+        btnStudent.classList.add('active');
+        btnOutsider.classList.remove('active');
+        studentSection.style.display = '';
+        outsiderSection.style.display = 'none';
+        formTitle.textContent = 'Student Profile';
+      } else {
+        btnOutsider.classList.add('active');
+        btnStudent.classList.remove('active');
+        studentSection.style.display = 'none';
+        outsiderSection.style.display = '';
+        formTitle.textContent = 'Outsider Profile';
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // wired file-label clicks
+    document.querySelectorAll('label.file-label').forEach(label=>{
+      label.addEventListener('click', ()=>{ 
+        const input = label.querySelector('input[type=file]');
+        if(input) input.click();
+      });
+    });
+
+    // ensure user logged in
+    let currentUser = null;
     onAuthStateChanged(auth, user => {
-      if (!user) {
-        alert("Please log in first!");
-        window.location.href = "login.html";
+      if(!user){
+        alert('Please log in first.');
+        window.location.href = 'login.html';
+      } else {
+        currentUser = user;
       }
     });
 
-    window.toggleSection = function() {
-      const userType = document.getElementById("userType").value;
-      document.getElementById("studentSection").classList.toggle("active", userType === "student");
-      document.getElementById("outsiderSection").classList.toggle("active", userType === "outsider");
-    };
-
-    async function saveProfile() {
-      const user = auth.currentUser;
-      if (!user) return alert("You must be logged in.");
-
-      const name = document.getElementById("name").value;
-      const age = document.getElementById("age").value;
-      const preferredAge = document.getElementById("preferredAge").value;
-      const hobbies = document.getElementById("hobbies").value;
-      const userType = document.getElementById("userType").value;
-      const profilePic = document.getElementById("profilePic").files[0];
-      let data = { uid: user.uid, name, age, preferredAge, hobbies, userType };
-
-      if (userType === "student") {
-        data.university = document.getElementById("university").value;
-        data.course = document.getElementById("course").value;
-      } else {
-        data.occupation = document.getElementById("occupation").value;
-        data.city = document.getElementById("city").value;
-        data.about = document.getElementById("about").value;
-      }
-
-      let photoURL = "";
-      if (profilePic) {
-        const storageRef = ref(storage, `profiles/${user.uid}.jpg`);
-        await uploadBytes(storageRef, profilePic);
-        photoURL = await getDownloadURL(storageRef);
-        data.photoURL = photoURL;
-      }
-
-      await setDoc(doc(db, "users", user.uid), data);
-      alert("💖 Profile saved successfully! Welcome to Campus Connect!");
-      window.location.href = "home.html";
+    // helper: upload file and return URL
+    async function uploadFile(uid, file, slot){
+      if(!file) return '';
+      const ext = file.name.split('.').pop().toLowerCase();
+      const path = `profiles/${uid}/photo_${slot}.${ext}`;
+      const storageRef = ref(storage, path);
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+      return url;
     }
 
+    // save profile
+    async function saveProfile(){
+      statusMsg.textContent = '';
+      statusMsg.className = '';
+
+      if(!currentUser) {
+        alert('You must be logged in to save a profile.');
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // basic fields
+      const name = document.getElementById('name').value.trim();
+      const age = document.getElementById('age').value.trim();
+      const preferredAge = document.getElementById('preferredAge').value.trim();
+      const hobbies = document.getElementById('hobbies').value.trim();
+
+      if(!name){
+        statusMsg.textContent = 'Please enter your name.';
+        statusMsg.className = 'error';
+        return;
+      }
+
+      try {
+        statusMsg.textContent = 'Saving profile...';
+        statusMsg.className = '';
+
+        // upload photos (if any)
+        const file1 = document.getElementById('photo1').files[0];
+        const file2 = document.getElementById('photo2').files[0];
+        const photo1URL = await uploadFile(currentUser.uid, file1, 1);
+        const photo2URL = await uploadFile(currentUser.uid, file2, 2);
+
+        const baseData = {
+          uid: currentUser.uid,
+          email: currentUser.email || '',
+          name,
+          age: age || '',
+          preferredAge: preferredAge || '',
+          hobbies: hobbies || '',
+          photos: [photo1URL, photo2URL].filter(Boolean),
+          userType: chosenType,
+          updatedAt: serverTimestamp()
+        };
+
+        if(chosenType === 'student'){
+          const university = document.getElementById('university').value.trim();
+          const course = document.getElementById('course').value.trim();
+          const preference = document.getElementById('studentPreference').value || '';
+
+          const docData = {
+            ...baseData,
+            university,
+            course,
+            preference
+          };
+
+          await setDoc(doc(db, 'students', currentUser.uid), docData);
+        } else {
+          const occupation = document.getElementById('occupation').value.trim();
+          const city = document.getElementById('city').value.trim();
+          const identity = document.getElementById('outsiderIdentity').value || '';
+          const looking = document.getElementById('outsiderLooking').value || '';
+
+          const docData = {
+            ...baseData,
+            occupation,
+            city,
+            identity,
+            looking
+          };
+
+          await setDoc(doc(db, 'outsiders', currentUser.uid), docData);
+        }
+
+        statusMsg.textContent = 'Profile saved ✅';
+        statusMsg.className = 'success';
+
+        // redirect to home or matchmaking (you can change)
+        setTimeout(()=> window.location.href = 'home.html', 900);
+
+      } catch (err) {
+        console.error('Save error', err);
+        statusMsg.textContent = 'Error saving profile: ' + (err.message || err);
+        statusMsg.className = 'error';
+      }
+    }
+
+    // expose to global for onclick
     window.saveProfile = saveProfile;
+    window.selectType = selectType;
+
+    // initialize default UI state
+    selectType('student');
   </script>
 </body>
 </html>

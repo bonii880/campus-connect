@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Create Profile | MatchConnect</title>
+  <title>Create Profile | MatchVibe</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -21,7 +21,7 @@
       border-radius: 20px;
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
       width: 100%;
-      max-width: 450px;
+      max-width: 480px;
     }
 
     h1 {
@@ -48,44 +48,7 @@
       font-size: 0.95em;
     }
 
-    textarea {
-      resize: none;
-    }
-
-    .upload-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .upload-hint {
-      font-size: 0.9em;
-      color: #ffb3b3;
-      margin-top: 5px;
-      font-style: italic;
-    }
-
-    input[type="file"] {
-      background-color: #2a2a2a;
-      border: 1px solid #444;
-      border-radius: 8px;
-      padding: 8px;
-      color: #fff;
-    }
-
-    input[type="file"]::-webkit-file-upload-button {
-      background-color: #e91e63;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 6px 12px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    input[type="file"]::-webkit-file-upload-button:hover {
-      background-color: #ff4081;
-    }
+    textarea { resize: none; }
 
     button {
       width: 100%;
@@ -100,16 +63,38 @@
       transition: 0.3s;
     }
 
-    button:hover {
-      background: #ff1e63;
+    button:hover { background: #ff1e63; }
+
+    .upload-hint {
+      font-size: 0.9em;
+      color: #ffb3b3;
+      margin-top: 5px;
+      font-style: italic;
     }
 
-    .section-title {
-      margin-top: 20px;
-      font-size: 1.2em;
-      color: #ffcdd2;
-      text-align: center;
-      text-decoration: underline;
+    .choice-buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 25px;
+    }
+
+    .choice-buttons button {
+      width: 45%;
+      background: #e91e63;
+      border: none;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    .section {
+      display: none;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .success {
@@ -123,57 +108,97 @@
 
 <body>
   <div class="container">
-    <h1>Create Your Profile</h1>
+    <h1>Create Your Profile 💘</h1>
 
-    <label>Name</label>
-    <input type="text" id="name" placeholder="Enter your full name" />
-
-    <label>Age</label>
-    <input type="number" id="age" placeholder="Enter your age" />
-
-    <label>Course</label>
-    <input type="text" id="course" placeholder="What are you studying or doing?" />
-
-    <label>What are you looking for?</label>
-    <select id="lookingFor">
-      <option value="">-- Select --</option>
-      <option value="Friendship">Friendship</option>
-      <option value="Relationship">Relationship</option>
-      <option value="Study Partner">Study Partner</option>
-      <option value="Sugar Daddy">Sugar Daddy</option>
-      <option value="Sugar Mummy">Sugar Mummy</option>
-      <option value="Sugar Boy">Sugar Boy</option>
-      <option value="Sugar Girl">Sugar Girl</option>
-    </select>
-
-    <label class="section-title">You Are</label>
-    <select id="youAre">
-      <option value="">-- Select --</option>
-      <option value="Student">Student</option>
-      <option value="Outsider">Outsider</option>
-      <option value="Businessman">Businessman</option>
-      <option value="Businesswoman">Businesswoman</option>
-    </select>
-
-    <label>Hobbies</label>
-    <textarea id="hobbies" rows="2" placeholder="e.g. music, football, movies..."></textarea>
-
-    <label>Upload Your Photos</label>
-    <div class="upload-container">
-      <input type="file" id="photo1" accept="image/*" />
-      <input type="file" id="photo2" accept="image/*" />
-      <p class="upload-hint">📸 You can upload up to <b>2 photos</b> (Max <b>2MB</b> each, <b>JPG</b> or <b>PNG</b> only)</p>
+    <div class="choice-buttons">
+      <button onclick="showSection('student')">🎓 Student</button>
+      <button onclick="showSection('outsider')">🌍 Outsider</button>
     </div>
 
-    <button id="saveProfile">Save Profile</button>
+    <!-- Student Section -->
+    <div id="studentSection" class="section">
+      <label>Name</label>
+      <input type="text" id="sName" placeholder="Enter your full name" />
+
+      <label>Age</label>
+      <input type="number" id="sAge" placeholder="Enter your age" />
+
+      <label>Course</label>
+      <input type="text" id="sCourse" placeholder="Your course" />
+
+      <label>What are you looking for?</label>
+      <select id="sLookingFor">
+        <option value="">-- Select --</option>
+        <option>Friendship</option>
+        <option>Relationship</option>
+        <option>Study Partner</option>
+        <option>Fun</option>
+      </select>
+
+      <label>Preference</label>
+      <select id="sPreference">
+        <option value="">-- Select --</option>
+        <option>Student</option>
+        <option>Mumama</option>
+        <option>Mubaba</option>
+      </select>
+
+      <label>Hobbies</label>
+      <textarea id="sHobbies" rows="2" placeholder="e.g. movies, gym, travel..."></textarea>
+
+      <label>Upload Your Photos (2 max)</label>
+      <input type="file" id="sPhoto1" accept="image/*">
+      <input type="file" id="sPhoto2" accept="image/*">
+      <p class="upload-hint">📸 Max 2MB each (JPG or PNG only)</p>
+
+      <button onclick="saveProfile('student')">Save Student Profile</button>
+    </div>
+
+    <!-- Outsider Section -->
+    <div id="outsiderSection" class="section">
+      <label>Name</label>
+      <input type="text" id="oName" placeholder="Enter your full name" />
+
+      <label>Age</label>
+      <input type="number" id="oAge" placeholder="Enter your age" />
+
+      <label>You Are</label>
+      <select id="oYouAre">
+        <option value="">-- Select --</option>
+        <option>Mubaba</option>
+        <option>Mumama</option>
+        <option>Other</option>
+      </select>
+
+      <label>What are you looking for?</label>
+      <select id="oLookingFor">
+        <option value="">-- Select --</option>
+        <option>Friendship</option>
+        <option>Relationship</option>
+        <option>One Night Stand</option>
+        <option>Friends With Benefits</option>
+        <option>Sugar Boy</option>
+        <option>Sugar Girl</option>
+      </select>
+
+      <label>Hobbies</label>
+      <textarea id="oHobbies" rows="2" placeholder="e.g. music, travel, cooking..."></textarea>
+
+      <label>Upload Your Photos (2 max)</label>
+      <input type="file" id="oPhoto1" accept="image/*">
+      <input type="file" id="oPhoto2" accept="image/*">
+      <p class="upload-hint">📸 Max 2MB each (JPG or PNG only)</p>
+
+      <button onclick="saveProfile('outsider')">Save Outsider Profile</button>
+    </div>
+
     <p class="success" id="successMessage">✅ Profile saved successfully!</p>
   </div>
 
   <script type="module">
-    // Firebase config (replace with your own Firebase setup)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-storage.js";
     import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "YOUR_API_KEY",
@@ -188,28 +213,50 @@
     const db = getFirestore(app);
     const storage = getStorage(app);
 
-    // File size validation
+    window.showSection = (type) => {
+      document.getElementById('studentSection').style.display = type === 'student' ? 'block' : 'none';
+      document.getElementById('outsiderSection').style.display = type === 'outsider' ? 'block' : 'none';
+    };
+
+    // Check file size before upload
     document.querySelectorAll('input[type="file"]').forEach(input => {
-      input.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file && file.size > 2 * 1024 * 1024) { // 2MB limit
-          alert(`⚠️ ${file.name} is too large. Please upload a file under 2MB.`);
+      input.addEventListener('change', e => {
+        const f = e.target.files[0];
+        if (f && f.size > 2 * 1024 * 1024) {
+          alert(`${f.name} is too large! Max 2MB allowed.`);
           e.target.value = "";
         }
       });
     });
 
-    // Save profile
-    document.getElementById('saveProfile').addEventListener('click', async () => {
-      const name = document.getElementById('name').value.trim();
-      const age = document.getElementById('age').value.trim();
-      const course = document.getElementById('course').value.trim();
-      const lookingFor = document.getElementById('lookingFor').value;
-      const youAre = document.getElementById('youAre').value;
-      const hobbies = document.getElementById('hobbies').value.trim();
-      const files = [document.getElementById('photo1').files[0], document.getElementById('photo2').files[0]].filter(Boolean);
+    window.saveProfile = async (type) => {
+      let data = {};
+      let files = [];
 
-      if (!name || !age || !lookingFor || !youAre) {
+      if (type === 'student') {
+        data = {
+          type,
+          name: sName.value.trim(),
+          age: sAge.value,
+          course: sCourse.value,
+          lookingFor: sLookingFor.value,
+          preference: sPreference.value,
+          hobbies: sHobbies.value
+        };
+        files = [sPhoto1.files[0], sPhoto2.files[0]].filter(Boolean);
+      } else {
+        data = {
+          type,
+          name: oName.value.trim(),
+          age: oAge.value,
+          youAre: oYouAre.value,
+          lookingFor: oLookingFor.value,
+          hobbies: oHobbies.value
+        };
+        files = [oPhoto1.files[0], oPhoto2.files[0]].filter(Boolean);
+      }
+
+      if (!data.name || !data.age || !data.lookingFor) {
         alert("Please fill all required fields.");
         return;
       }
@@ -217,30 +264,21 @@
       try {
         let photoURLs = [];
         for (const file of files) {
-          const fileRef = ref(storage, 'profiles/' + Date.now() + '-' + file.name);
+          const fileRef = ref(storage, `profiles/${Date.now()}-${file.name}`);
           await uploadBytes(fileRef, file);
           const url = await getDownloadURL(fileRef);
           photoURLs.push(url);
         }
 
-        await setDoc(doc(db, "profiles", name), {
-          name,
-          age,
-          course,
-          lookingFor,
-          youAre,
-          hobbies,
-          photos: photoURLs
-        });
+        data.photos = photoURLs;
+        await setDoc(doc(db, "profiles", data.name), data);
 
         document.getElementById('successMessage').style.display = 'block';
-        setTimeout(() => {
-          window.location.href = "match.html"; // redirect to matchmaking
-        }, 1500);
-      } catch (error) {
-        alert("❌ Failed to save profile: " + error.message);
+        setTimeout(() => window.location.href = "match.html", 1500);
+      } catch (err) {
+        alert("❌ " + err.message);
       }
-    });
+    };
   </script>
 </body>
 </html>

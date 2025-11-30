@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Account Type</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom right, #ff3e8d, #6a00ff);
+            color: white;
+            text-align: center;
+            padding-top: 100px;
+        }
+        h2 {
+            font-size: 28px;
+            margin-bottom: 40px;
+        }
+        .btn {
+            display: block;
+            width: 250px;
+            padding: 15px;
+            margin: 20px auto;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .student {
+            background: #00d4ff;
+            color: #000;
+        }
+        .student:hover {
+            background: #00a9cc;
+        }
+        .outsider {
+            background: #ffea00;
+            color: #000;
+        }
+        .outsider:hover {
+            background: #ccb900;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Who Are You?</h2>
+
+    <button class="btn student" onclick="goStudent()">I am a Student</button>
+    <button class="btn outsider" onclick="goOutsider()">I am an Outsider</button>
+
+    <script>
+        function goStudent() {
+            window.location.href = "student_profile.html";
+        }
+        function goOutsider() {
+            window.location.href = "outsider_profile.html";
+        }
+    </script>
+
+</body>
+</html>

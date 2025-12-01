@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Outsider Profile — CampusConnect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#2a0820; --bg2:#12000b;
+      --pink1:#ff69b4; --pink2:#ff1493;
+      --card: rgba(255,255,255,0.06); --muted:#f3c0d6;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100vh; font-family:Inter, Poppins, system-ui;
+      background: linear-gradient(135deg,var(--bg1),var(--bg2));
+      color:#fff; display:flex; justify-content:center; padding:28px;
+    }
+
+    .wrap{width:100%; max-width:760px}
+    .card{
+      background:var(--card); border-radius:18px; padding:24px;
+      box-shadow:0 8px 40px rgba(0,0,0,0.45); border: 1px solid rgba(255,20,147,0.06);
+      backdrop-filter: blur(6px);
+    }
+    h1{font-family:'Great Vibes',cursive;color:var(--pink2);font-size:38px;margin:0}
+    p.lead{color:var(--muted);margin:6px 0 18px}
+
+    .grid{display:grid; grid-template-columns:150px 1fr; gap:18px; align-items:start;}
+    @media (max-width:720px){ .grid{grid-template-columns: 1fr} }
+
+    .avatar-wrapper{display:flex;justify-content:center}
+    .avatar-preview{
+      width:130px;height:130px;border-radius:50%;object-fit:cover;border:4px solid rgba(255,77,166,0.28);
+      box-shadow:0 8px 30px rgba(255,20,147,0.12); background:linear-gradient(180deg,rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      transition:transform .18s ease; display:block;
+    }
+    .avatar-preview:hover{ transform:scale(1.03) }
+
+    .file-label{
+      display:block;margin-top:12px;padding:8px;border-radius:10px;background:linear-gradient(90deg,var(--pink1),var(--pink2));
+      color:#fff;text-align:center;cursor:pointer;font-weight:700;
+    }
+    .file-label input{display:none}
+
+    label{display:block;margin-top:12px;color:#ffd6ea;font-weight:600}
+    input[type="text"],input[type="number"],select,textarea{
+      width:100%; padding:10px 12px; border-radius:10px;border:none;background:rgba(255,255,255,0.04); color:#fff;
+      font-size:15px; outline:none;
+    }
+    textarea{min-height:80px; resize:vertical}
+    .row{display:flex;gap:12px}
+    .col{flex:1}
+
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .chip{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.04);cursor:pointer;border:1px solid rgba(255,255,255,0.03);user-select:none}
+    .chip.active{ background: linear-gradient(90deg,var(--pink1),var(--pink2)); box-shadow:0 8px 30px rgba(255,20,147,0.14); color:#fff; border:none }
+
+    .btn{
+      width:100%; padding:14px; border-radius:14px;border:none; cursor:pointer;
+      background: linear-gradient(90deg,var(--pink1),var(--pink2)); color:white; font-weight:700; font-size:16px;margin-top:18px;
+      box-shadow: 0 10px 30px rgba(255,20,147,0.12);
+    }
+
+    .note{font-size:13px;color:#ffd6ea;margin-top:8px}
+    .error{color:#ffb3c7;font-weight:700;margin-top:10px;display:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Outsider Profile</h1>
+      <p class="lead">Create your profile — matches will see your nickname & photo. Fill honestly for better matches.</p>
+
+      <div class="grid">
+        <!-- Left: Avatar -->
+        <div>
+          <div class="avatar-wrapper">
+            <img id="avatarPreview" class="avatar-preview" src="https://via.placeholder.com/300x300.png?text=Upload+Photo" alt="avatar">
+          </div>
+          <label class="file-label">Upload Photo (Max 2MB)
+            <input id="profilePic" type="file" accept="image/*">
+          </label>
+          <div class="note">📸 JPG / PNG. Max 2MB.</div>
+        </div>
+
+        <!-- Right: Form -->
+        <div>
+          <!-- Personal -->
+          <label>Full name *</label>
+          <input id="name" type="text" placeholder="Your full name">
+
+          <label>Nickname (display name) *</label>
+          <input id="nickname" type="text" placeholder="Name shown on home">
+
+          <div class="row">
+            <div class="col">
+              <label>County *</label>
+              <input id="county" type="text" placeholder="e.g., Nairobi">
+            </div>
+            <div class="col">
+              <label>Age *</label>
+              <input id="age" type="number" min="18" placeholder="18">
+            </div>
+          </div>
+
+          <label>Occupation *</label>
+          <input id="occupation" type="text" placeholder="e.g., Entrepreneur, Business">
+
+          <!-- What they're looking for -->
+          <label>What are you looking for? * (choose 1 or more)</label>
+          <div id="lookingChips" class="chips" aria-hidden="false">
+            <div class="chip" data-value="SugarBoy">Sugar Boy</div>
+            <div class="chip" data-value="SugarGirl">Sugar Girl</div>
+            <div class="chip" data-value="Casual">Casual</div>
+            <div class="chip" data-value="Relationship">Relationship</div>
+            <div class="chip" data-value="FWB">Friends With Benefits</div>
+            <div class="chip" data-value="FuckBuddies">Fuck Buddies</div>
+            <div class="chip" data-value="Mumama">Mumama</div>
+            <div class="chip" data-value="Mubaba">Mubaba</div>
+            <div class="chip" data-value="Other">Other</div>
+          </div>
+
+          <!-- Match Preference (this is where user selects student/outsider/both) -->
+          <label style="margin-top:14px">Match Preference (who you want matched with) *</label>
+          <select id="matchWith">
+            <option value="">Select</option>
+            <option value="Student">Student</option>
+            <option value="Outsider">Outsider</option>
+            <option value="Both">Both</option>
+          </select>
+
+          <!-- Always show: preferred county & age range -->
+          <label style="margin-top:12px">Preferred county for match *</label>
+          <input id="prefCounty" type="text" placeholder="e.g., Nairobi">
+
+          <label>Preferred age range *</label>
+          <input id="prefAgeRange" type="text" placeholder="e.g., 18-28">
+
+          <!-- Conditional prefs -->
+          <div id="prefSchool" style="margin-top:10px;">
+            <input id="prefUniversity" type="text" placeholder="Preferred University/College (if matching students)">
+            <input id="prefYear" type="text" placeholder="Preferred Year of Study (e.g., 2nd)" style="margin-top:8px">
+          </div>
+
+          <div id="prefOccupationField" style="margin-top:10px;">
+            <input id="prefOccupation" type="text" placeholder="Preferred Occupation (if matching outsiders)">
+          </div>
+
+          <div id="error" class="error"></div>
+          <button id="saveBtn" class="btn">Save Profile</button>
+          <div id="saving" class="note" style="display:none">Saving profile…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth, db, storage } from './firebase.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js";
+
+    // UI elements
+    const profilePicEl = document.getElementById('profilePic');
+    const avatarPreview = document.getElementById('avatarPreview');
+    const nameEl = document.getElementById('name');
+    const nickEl = document.getElementById('nickname');
+    const countyEl = document.getElementById('county');
+    const ageEl = document.getElementById('age');
+    const occupationEl = document.getElementById('occupation');
+    const chips = document.querySelectorAll('.chip');
+    const matchWithEl = document.getElementById('matchWith');
+    const prefCountyEl = document.getElementById('prefCounty');
+    const prefAgeEl = document.getElementById('prefAgeRange');
+    const prefUniEl = document.getElementById('prefUniversity');
+    const prefYearEl = document.getElementById('prefYear');
+    const prefOccupationEl = document.getElementById('prefOccupation');
+    const prefSchoolDiv = document.getElementById('prefSchool');
+    const prefOccDiv = document.getElementById('prefOccupationField');
+    const errorEl = document.getElementById('error');
+    const saveBtn = document.getElementById('saveBtn');
+    const savingEl = document.getElementById('saving');
+
+    // state
+    const selectedLooking = new Set();
+
+    // multi-select chips toggle
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        const v = chip.dataset.value;
+        if (selectedLooking.has(v)) {
+          selectedLooking.delete(v);
+          chip.classList.remove('active');
+        } else {
+          selectedLooking.add(v);
+          chip.classList.add('active');
+        }
+      });
+    });
+
+    // image preview + validation (2MB)
+    profilePicEl.addEventListener('change', e => {
+      const f = e.target.files[0];
+      if (!f) return;
+      if (f.size > 2 * 1024 * 1024) {
+        alert('Image too large — max 2MB. Resize and try again.');
+        profilePicEl.value = '';
+        return;
+      }
+      avatarPreview.src = URL.createObjectURL(f);
+    });
+
+    // show/hide preference fields depending on matchWith
+    function updatePrefFields(){
+      const v = matchWithEl.value;
+      if (v === 'Student') {
+        prefSchoolDiv.style.display = 'block';
+        prefOccDiv.style.display = 'none';
+      } else if (v === 'Outsider') {
+        prefSchoolDiv.style.display = 'none';
+        prefOccDiv.style.display = 'block';
+      } else if (v === 'Both') {
+        prefSchoolDiv.style.display = 'block';
+        prefOccDiv.style.display = 'block';
+      } else {
+        prefSchoolDiv.style.display = 'none';
+        prefOccDiv.style.display = 'none';
+      }
+    }
+    matchWithEl.addEventListener('change', updatePrefFields);
+    updatePrefFields();
+
+    // require login
+    let currentUser = null;
+    onAuthStateChanged(auth, user => {
+      if (!user) {
+        alert('Please login to continue');
+        window.location.href = 'login.html';
+        return;
+      }
+      currentUser = user;
+    });
+
+    // validation function
+    function validate() {
+      errorEl.style.display = 'none';
+      const name = nameEl.value.trim();
+      const nick = nickEl.value.trim();
+      const county = countyEl.value.trim();
+      const age = Number(ageEl.value);
+      const occupation = occupationEl.value.trim();
+      const matchWith = matchWithEl.value;
+      const prefCounty = prefCountyEl.value.trim();
+      const prefAge = prefAgeEl.value.trim();
+
+      if (!name) return 'Enter your full name';
+      if (!nick || nick.length < 3) return 'Nickname is required (min 3 characters)';
+      if (!county) return 'Enter your county';
+      if (!age || age < 18) return 'Age must be 18 or older';
+      if (!occupation) return 'Enter your occupation';
+      if (selectedLooking.size === 0) return 'Choose at least one option for what you are looking for';
+      if (!matchWith) return 'Select who you want matched with (Student / Outsider / Both)';
+      if (!prefCounty) return 'Enter preferred county for matches';
+      if (!prefAge) return 'Enter preferred age range (e.g., 18-28)';
+      if (matchWith === 'Student') {
+        if (!prefUniEl.value.trim()) return 'Enter preferred University/College (or N/A)';
+        if (!prefYearEl.value.trim()) return 'Enter preferred year of study (or N/A)';
+      }
+      if (matchWith === 'Outsider') {
+        if (!prefOccupationEl.value.trim()) return 'Enter preferred occupation for outsiders';
+      }
+      if (!profilePicEl.files[0]) return 'Please upload a profile picture (max 2MB)';
+      return null;
+    }
+
+    // Save profile
+    saveBtn.addEventListener('click', async () => {
+      const vErr = validate();
+      if (vErr) {
+        errorEl.textContent = vErr;
+        errorEl.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      if (!currentUser) return alert('Not logged in');
+      saveBtn.disabled = true;
+      savingEl.style.display = 'block';
+
+      try {
+        const data = {
+          uid: currentUser.uid,
+          email: currentUser.email || '',
+          name: nameEl.value.trim(),
+          nickname: nickEl.value.trim(),
+          age: Number(ageEl.value),
+          county: countyEl.value.trim(),
+          occupation: occupationEl.value.trim(),
+          lookingFor: Array.from(selectedLooking),
+          matchPreference: matchWithEl.value,
+          pref: {
+            county: prefCountyEl.value.trim(),
+            ageRange: prefAgeEl.value.trim(),
+            university: prefUniEl.value.trim(),
+            year: prefYearEl.value.trim(),
+            occupation: prefOccupationEl.value.trim()
+          },
+          userType: 'outsider',
+          createdAt: serverTimestamp()
+        };
+
+        // upload profile pic
+        const file = profilePicEl.files[0];
+        if (file) {
+          const storageRef = ref(storage, `profiles/${currentUser.uid}/profile.jpg`);
+          await uploadBytes(storageRef, file);
+          data.profilePic = await getDownloadURL(storageRef);
+        }
+
+        // save to outsiders collection
+        await setDoc(doc(db, 'outsiders', currentUser.uid), data);
+
+        savingEl.textContent = 'Saved ✅ Redirecting to home...';
+        setTimeout(()=> window.location.href = 'home.html', 900);
+      } catch (err) {
+        console.error(err);
+        errorEl.textContent = 'Save failed: ' + (err.message || err);
+        errorEl.style.display = 'block';
+      } finally {
+        saveBtn.disabled = false;
+        savingEl.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

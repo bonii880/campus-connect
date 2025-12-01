@@ -1,71 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Welcome to CampusConnect</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CampusConnect</title>
   <style>
-    body {
-      background-color: black;
-      color: white;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      max-width: 600px;
-    }
-
-    h1 {
-      font-size: 3rem;
-      font-weight: bold;
-      color: #ff4da6;
-    }
-
-    p {
-      font-size: 1.2rem;
-      margin: 20px 0;
-      color: #eee;
-    }
-
-    .buttons {
-      margin-top: 30px;
-    }
-
-    .buttons a {
-      text-decoration: none;
-    }
-
-    .buttons button {
-      background-color: #ff4da6;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      margin: 10px;
-      font-size: 1.2rem;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .buttons button:hover {
-      background-color: #e60073;
-    }
+    body{font-family:Poppins,Arial;background:linear-gradient(135deg,#ffb6c1,#ff69b4);margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center}
+    .card{background:rgba(255,255,255,0.95);padding:28px;border-radius:16px;max-width:420px;width:90%;text-align:center}
+    h1{color:#ff1493;margin:0 0 8px}
+    p{color:#333}
+    a{display:inline-block;padding:12px 18px;border-radius:12px;background:#ff4da6;color:#fff;text-decoration:none;margin:8px}
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Welcome to <span style="color:#fff;">CampusConnect</span></h1>
-    <p>Connect with students across universities. Make friends. Find love. Build memories.</p>
-    <div class="buttons">
-      <a href="signup.html"><button>Sign Up</button></a>
-      <a href="login.html"><button>Login</button></a>
+  <div class="card">
+    <h1>CampusConnect</h1>
+    <p>Find study partners, friendships, or something spicy — join the vibe.</p>
+    <div style="margin-top:16px">
+      <a href="signup.html">Sign Up</a>
+      <a href="login.html" style="background:#ff1493">Login</a>
     </div>
   </div>
 </body>

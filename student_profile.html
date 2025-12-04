@@ -1,92 +1,210 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Profile</title>
+    <style>
+        body {
+            background: #5a2da5;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 450px;
+            margin: auto;
+        }
+        input, select {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+        }
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 100%;
+            background: #ddd;
+            object-fit: cover;
+            margin-bottom: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background: #ff2f92;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
 
-<h2>Create Your Student Profile</h2>
+    <h2 style="text-align:center;">Create Student Profile</h2>
 
-<input type="file" id="profileImage" accept="image/*"><br><br>
-<img id="preview" width="150" style="border-radius: 10px;"><br><br>
+    <div class="container">
 
-<input type="text" id="name" placeholder="Name"><br><br>
-<input type="text" id="nickname" placeholder="Nickname"><br><br>
-<input type="number" id="age" placeholder="Age"><br><br>
-<input type="text" id="county" placeholder="County"><br><br>
-<input type="text" id="year" placeholder="Year of Study"><br><br>
-<input type="text" id="school" placeholder="University / College"><br><br>
+        <img id="previewImage" class="profile-pic" src=""/>
 
-<button id="saveProfile">Save Profile</button>
+        <label>Profile Picture</label>
+        <input type="file" id="profileImage" accept="image/*" />
 
-<script type="module">
+        <label>Name</label>
+        <input type="text" id="name">
 
-// ------------------------ CLOUDINARY UPLOAD FUNCTION ------------------------
-async function uploadImageToCloudinary(file) {
-  const cloudName = "YOUR_CLOUD_NAME";
-  const uploadPreset = "YOUR_UPLOAD_PRESET";
+        <label>Nickname</label>
+        <input type="text" id="nickname">
 
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("upload_preset", uploadPreset);
+        <label>County</label>
+        <input type="text" id="county">
 
-  const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-    method: "POST",
-    body: formData
-  });
+        <label>Age</label>
+        <input type="number" id="age">
 
-  const data = await res.json();
-  return data.secure_url;
-}
+        <label>University / College</label>
+        <input type="text" id="university">
 
-// ------------------------ IMAGE UPLOAD + PREVIEW ------------------------
-const fileInput = document.getElementById("profileImage");
-const preview = document.getElementById("preview");
-let uploadedImageURL = "";
+        <label>Year of Study</label>
+        <input type="text" id="year">
 
-fileInput.addEventListener("change", async () => {
-  const file = fileInput.files[0];
-  if (!file) return;
+        <label>Course</label>
+        <input type="text" id="course">
 
-  preview.src = URL.createObjectURL(file);
-  uploadedImageURL = await uploadImageToCloudinary(file);
-});
+        <label>What are you looking for?</label>
+        <select id="lookingFor" multiple>
+            <option>Dating/Relationship</option>
+            <option>Casual</option>
+            <option>Friends with Benefit</option>
+            <option>Fuck Buddies</option>
+            <option>Study Partner</option>
+            <option>Mumama</option>
+            <option>Mubaba</option>
+        </select>
 
-// ------------------------ FIREBASE (ONLY FOR SAVING TEXT + IMAGE URL) ------------------------
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
+        <label>Interested in</label>
+        <select id="interestedIn">
+            <option value="student">Students</option>
+            <option value="outsider">Outsiders</option>
+            <option value="both">Both</option>
+        </select>
 
-const firebaseConfig = {
-  // YOUR FIREBASE INFO
-};
+        <h3>Match Preferences</h3>
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+        <label>Preferred County</label>
+        <input type="text" id="p_county">
 
-// ------------------------ SAVE PROFILE ------------------------
-document.getElementById("saveProfile").addEventListener("click", async () => {
+        <label>Preferred Age (e.g 18-28)</label>
+        <input type="text" id="p_age">
 
-  if (uploadedImageURL === "") {
-      alert("Please upload an image first!");
-      return;
-  }
+        <label id="labUni">Preferred University/College</label>
+        <input type="text" id="p_uni">
 
-  const userId = localStorage.getItem("userId");
+        <label id="labYear">Preferred Year of Study</label>
+        <input type="text" id="p_year">
 
-  await setDoc(doc(db, "users", userId), {
-    type: "student",
-    name: document.getElementById("name").value,
-    nickname: document.getElementById("nickname").value,
-    age: document.getElementById("age").value,
-    county: document.getElementById("county").value,
-    year: document.getElementById("year").value,
-    school: document.getElementById("school").value,
-    profileImage: uploadedImageURL
-  });
+        <button onclick="saveStudentProfile()">Save Profile</button>
+    </div>
 
-  window.location.href = "home.html";
-});
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
 
+<script>
+    // YOUR FIREBASE CONFIG
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_BUCKET",
+        messagingSenderId: "YOUR_MSGID",
+        appId: "YOUR_APPID"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    let cloudName = "YOUR_CLOUD_NAME";
+    let uploadPreset = "YOUR_UPLOAD_PRESET";
+
+    // Image Preview
+    document.getElementById("profileImage").addEventListener("change", function(){
+        let file = this.files[0];
+        document.getElementById("previewImage").src = URL.createObjectURL(file);
+    });
+
+    // Hide university/year fields if user selects "outsider"
+    document.getElementById("interestedIn").addEventListener("change", function(){
+        if(this.value === "outsider"){
+            document.getElementById("labUni").style.display = "none";
+            document.getElementById("labYear").style.display = "none";
+            document.getElementById("p_uni").style.display = "none";
+            document.getElementById("p_year").style.display = "none";
+        } else {
+            document.getElementById("labUni").style.display = "block";
+            document.getElementById("labYear").style.display = "block";
+            document.getElementById("p_uni").style.display = "block";
+            document.getElementById("p_year").style.display = "block";
+        }
+    });
+
+    async function uploadToCloudinary(file) {
+        let url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+
+        let formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", uploadPreset);
+
+        let res = await fetch(url, { method: "POST", body: formData });
+        let data = await res.json();
+        return data.secure_url;
+    }
+
+    async function saveStudentProfile(){
+        const user = auth.currentUser;
+
+        if(!user){
+            alert("Not logged in!");
+            return;
+        }
+
+        let imageFile = document.getElementById("profileImage").files[0];
+        let imageUrl = "";
+
+        if(imageFile){
+            imageUrl = await uploadToCloudinary(imageFile);
+        }
+
+        await db.collection("students").doc(user.uid).set({
+            name: name.value,
+            nickname: nickname.value,
+            county: county.value,
+            age: age.value,
+            university: university.value,
+            year: year.value,
+            course: course.value,
+            lookingFor: Array.from(lookingFor.selectedOptions).map(o=>o.value),
+            interestedIn: interestedIn.value,
+            p_county: p_county.value,
+            p_age: p_age.value,
+            p_uni: p_uni.value,
+            p_year: p_year.value,
+            profilePic: imageUrl
+        });
+
+        window.location.href = "home.html";
+    }
 </script>
 
 </body>

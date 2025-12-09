@@ -20,13 +20,9 @@
       display:flex;
       justify-content:center;
       padding:32px 16px;
+      -webkit-font-smoothing:antialiased;
     }
-
-    .wrap{
-      width:100%;
-      max-width:720px;
-    }
-
+    .wrap{width:100%;max-width:720px;}
     .card{
       background:var(--card);
       border-radius:18px;
@@ -35,16 +31,17 @@
       border: 1px solid rgba(255,20,147,0.08);
       backdrop-filter: blur(6px);
     }
-
     h1{font-family:'Great Vibes', cursive; font-size:40px;margin:0 0 6px;color:var(--pink2)}
     p.lead{color:var(--muted);margin:0 0 18px}
 
     .grid{
       display:grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: 150px 1fr;
       gap:18px;
       align-items:start;
     }
+
+    .left{text-align:center;}
 
     label{display:block;font-weight:600;margin-top:12px;color:#ffd6ea}
     input[type="text"], input[type="number"], select, textarea {
@@ -52,18 +49,16 @@
       background: rgba(255,255,255,0.04); color: #fff; font-size:15px;
       outline: none;
     }
+    textarea{min-height:86px; resize:vertical}
+    .row{display:flex;gap:12px}
+    .col{flex:1}
 
     .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
     .chip{
-      padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.04);cursor:pointer;
-      border:1px solid rgba(255,255,255,0.03);
+      padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.04);cursor:pointer;border:1px solid rgba(255,255,255,0.03);
+      user-select:none;
     }
-    .chip.active{
-      background: linear-gradient(90deg,var(--pink1),var(--pink2));
-      box-shadow:0 6px 20px rgba(255,20,147,0.18);
-      color:white;
-      border:none
-    }
+    .chip.active{ background: linear-gradient(90deg,var(--pink1),var(--pink2)); box-shadow:0 6px 20px rgba(255,20,147,0.18); color:white; border:none }
 
     .btn{
       width:100%;
@@ -79,11 +74,14 @@
       box-shadow: 0 10px 30px rgba(255,20,147,0.12);
     }
 
-    .error{color:#ffb3c7;font-weight:600;margin-top:8px}
     .note{font-size:13px;color:#ffd6ea;margin-top:8px}
-  </style>
+    .error{color:#ffb3c7;font-weight:600;margin-top:8px}
 
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    @media (max-width:720px){
+      .grid{grid-template-columns: 1fr; }
+      .left{order:2;text-align:left}
+    }
+  </style>
 </head>
 
 <body>
@@ -92,135 +90,189 @@
       <h1>Complete Your Student Profile</h1>
       <p class="lead">Fill details honestly — your nickname will be visible on the home page to potential matches.</p>
 
-      <!-- FULL FORM, IMAGE REMOVED ONLY -->
-      <label>Full name *</label>
-      <input id="name" type="text">
+      <div class="grid">
+        <div class="left"></div> <!-- Picture section removed -->
 
-      <label>Nickname *</label>
-      <input id="nickname" type="text">
+        <div class="right">
 
-      <label>County *</label>
-      <input id="county" type="text">
+          <label>Full name *</label>
+          <input id="name" type="text" placeholder="Your full name" />
 
-      <label>Age *</label>
-      <input id="age" type="number" min="18">
+          <label>Nickname *</label>
+          <input id="nickname" type="text" placeholder="Nickname that shows on home" />
 
-      <label>University / College *</label>
-      <input id="university" type="text">
+          <div class="row">
+            <div class="col">
+              <label>County *</label>
+              <input id="county" type="text" placeholder="e.g., Nairobi" />
+            </div>
+            <div class="col">
+              <label>Age *</label>
+              <input id="age" type="number" min="18" placeholder="18" />
+            </div>
+          </div>
 
-      <label>Year of study *</label>
-      <select id="year">
-        <option value="">Select year</option>
-        <option value="1">1st Year</option>
-        <option value="2">2nd Year</option>
-        <option value="3">3rd Year</option>
-        <option value="4">4th Year</option>
-        <option value="5">5th Year</option>
-      </select>
+          <label>University / College *</label>
+          <input id="university" type="text" placeholder="e.g., University of Nairobi" />
 
-      <label>Course *</label>
-      <input id="course" type="text">
+          <div class="row">
+            <div class="col">
+              <label>Year of study *</label>
+              <select id="year">
+                <option value="">Select year</option>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+                <option value="5">5th Year</option>
+                <option value="6">6th Year</option>
+              </select>
+            </div>
+            <div class="col">
+              <label>Course *</label>
+              <input id="course" type="text" placeholder="e.g., Computer Science" />
+            </div>
+          </div>
 
-      <label>What are you looking for? *</label>
-      <div id="lookingChips" class="chips">
-        <div class="chip" data-value="Dating/Relationship">Dating/Relationship</div>
-        <div class="chip" data-value="Casual">Casual</div>
-        <div class="chip" data-value="FWB">Friends With Benefits</div>
-        <div class="chip" data-value="FuckBuddies">Fuck Buddies</div>
-        <div class="chip" data-value="StudyPartner">Study Partner</div>
-        <div class="chip" data-value="Mumama">Mumama</div>
-        <div class="chip" data-value="Mubaba">Mubaba</div>
+          <label>What are you looking for? *</label>
+          <div id="lookingChips" class="chips">
+            <div class="chip" data-value="Dating/Relationship">Dating / Relationship</div>
+            <div class="chip" data-value="Casual">Casual</div>
+            <div class="chip" data-value="FriendsWithBenefit">Friends With Benefit</div>
+            <div class="chip" data-value="FuckBuddies">Fuck Buddies</div>
+            <div class="chip" data-value="StudyPartner">Study Partner</div>
+            <div class="chip" data-value="Mumama">Mumama</div>
+            <div class="chip" data-value="Mubaba">Mubaba</div>
+            <div class="chip" data-value="Other">Other</div>
+          </div>
+
+          <label>Interested in *</label>
+          <select id="interestedIn">
+            <option value="">Select</option>
+            <option value="Student">Student</option>
+            <option value="Outsider">Outsider</option>
+            <option value="Both">Both</option>
+          </select>
+
+          <label style="margin-top:14px">Match preferences</label>
+          <div class="row">
+            <div class="col">
+              <input id="prefCounty" type="text" placeholder="Preferred county (e.g., Nairobi)" />
+            </div>
+            <div class="col">
+              <input id="prefAgeRange" type="text" placeholder="Preferred age range (e.g., 18-28)" />
+            </div>
+          </div>
+
+          <div id="schoolPrefs" style="margin-top:12px">
+            <input id="prefUniversity" type="text" placeholder="Preferred University/College" />
+            <input id="prefYear" type="text" placeholder="Preferred Year of study" style="margin-top:8px" />
+          </div>
+
+          <div id="error" class="error" style="display:none"></div>
+          <button id="saveBtn" class="btn">Save Profile</button>
+          <div id="saving" class="note" style="display:none">Saving profile…</div>
+        </div>
       </div>
-
-      <label>Interested in *</label>
-      <select id="interestedIn">
-        <option value="">Select</option>
-        <option value="Student">Student</option>
-        <option value="Outsider">Outsider</option>
-        <option value="Both">Both</option>
-      </select>
-
-      <label>Match preferences</label>
-      <input id="prefCounty" type="text" placeholder="Preferred County">
-      <input id="prefAgeRange" type="text" placeholder="18–28">
-
-      <div id="schoolPrefs">
-        <input id="prefUniversity" type="text" placeholder="Preferred University">
-        <input id="prefYear" type="text" placeholder="Preferred Year of Study">
-      </div>
-
-      <div id="error" class="error" style="display:none"></div>
-
-      <button id="saveBtn" class="btn">Save Profile</button>
-      <div id="saving" class="note" style="display:none">Saving…</div>
     </div>
   </div>
 
-  <script type="module">
-    import { auth, db } from "./firebase.js";
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-    import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+<script type="module">
+  import { auth, db } from './firebase.js';
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+  import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-    const nameEl = document.getElementById("name");
-    const nickEl = document.getElementById("nickname");
-    const countyEl = document.getElementById("county");
-    const ageEl = document.getElementById("age");
-    const uniEl = document.getElementById("university");
-    const yearEl = document.getElementById("year");
-    const courseEl = document.getElementById("course");
-    const interestedEl = document.getElementById("interestedIn");
-    const prefCountyEl = document.getElementById("prefCounty");
-    const prefAgeEl = document.getElementById("prefAgeRange");
-    const prefUniEl = document.getElementById("prefUniversity");
-    const prefYearEl = document.getElementById("prefYear");
-    const saveBtn = document.getElementById("saveBtn");
-    const errorEl = document.getElementById("error");
-    const savingEl = document.getElementById("saving");
+  const nameEl = document.getElementById('name');
+  const nickEl = document.getElementById('nickname');
+  const countyEl = document.getElementById('county');
+  const ageEl = document.getElementById('age');
+  const uniEl = document.getElementById('university');
+  const yearEl = document.getElementById('year');
+  const courseEl = document.getElementById('course');
+  const prefCountyEl = document.getElementById('prefCounty');
+  const prefAgeEl = document.getElementById('prefAgeRange');
+  const prefUniEl = document.getElementById('prefUniversity');
+  const prefYearEl = document.getElementById('prefYear');
+  const interestedEl = document.getElementById('interestedIn');
+  const chips = document.querySelectorAll('.chip');
 
-    const chips = document.querySelectorAll(".chip");
-    const selectedLooking = new Set();
-    chips.forEach(chip=>{
-      chip.addEventListener("click", ()=>{
-        const val = chip.dataset.value;
-        if(selectedLooking.has(val)){ selectedLooking.delete(val); chip.classList.remove("active"); }
-        else { selectedLooking.add(val); chip.classList.add("active"); }
-      });
-    });
+  const errorEl = document.getElementById('error');
+  const saveBtn = document.getElementById('saveBtn');
+  const savingEl = document.getElementById('saving');
 
-    let currentUser = null;
-    onAuthStateChanged(auth,user=>{
-      if(!user){ window.location.href="login.html"; return; }
-      currentUser = user;
-    });
-
-    function validate(){
-      if(!nameEl.value.trim()) return "Enter your name";
-      if(!nickEl.value.trim()) return "Enter nickname";
-      if(!countyEl.value.trim()) return "Enter county";
-      if(!ageEl.value || ageEl.value < 18) return "Age must be 18+";
-      if(!uniEl.value.trim()) return "Enter university";
-      if(!yearEl.value) return "Select year";
-      if(!courseEl.value.trim()) return "Enter course";
-      if(selectedLooking.size === 0) return "Choose what you're looking for";
-      if(!interestedEl.value) return "Select interested in";
-      if(!prefCountyEl.value.trim()) return "Enter preferred county";
-      if(!prefAgeEl.value.trim()) return "Enter preferred age";
-      if(interestedEl.value !== "Outsider"){
-        if(!prefUniEl.value.trim()) return "Enter preferred university";
-        if(!prefYearEl.value.trim()) return "Enter preferred year";
+  const selectedLooking = new Set();
+  chips.forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      const val = chip.dataset.value;
+      if(selectedLooking.has(val)){
+        selectedLooking.delete(val);
+        chip.classList.remove('active');
+      } else {
+        selectedLooking.add(val);
+        chip.classList.add('active');
       }
-      return null;
+    });
+  });
+
+  function updateSchoolPrefs(){
+    if(interestedEl.value === 'Outsider'){
+      schoolPrefs.style.display = 'none';
+    } else {
+      schoolPrefs.style.display = 'block';
+    }
+  }
+  interestedEl.addEventListener('change', updateSchoolPrefs);
+  updateSchoolPrefs();
+
+  let currentUser = null;
+  onAuthStateChanged(auth, user=>{
+    if(!user){
+      alert("Please login first");
+      window.location.href = "login.html";
+      return;
+    }
+    currentUser = user;
+  });
+
+  function validate(){
+    errorEl.style.display = 'none';
+    if(!nameEl.value.trim()) return "Enter your full name";
+    if(!nickEl.value.trim()) return "Nickname required";
+    if(!countyEl.value.trim()) return "Enter county";
+    if(!ageEl.value || ageEl.value < 18) return "Age must be 18+";
+    if(!uniEl.value.trim()) return "Enter university";
+    if(!yearEl.value) return "Select year";
+    if(!courseEl.value.trim()) return "Enter course";
+    if(selectedLooking.size === 0) return "Choose what you're looking for";
+    if(!interestedEl.value) return "Select interested in";
+    if(!prefCountyEl.value.trim()) return "Enter preferred county";
+    if(!prefAgeEl.value.trim()) return "Enter preferred age range";
+
+    if(interestedEl.value !== "Outsider"){
+      if(!prefUniEl.value.trim()) return "Enter preferred university";
+      if(!prefYearEl.value.trim()) return "Enter preferred year";
     }
 
-    saveBtn.addEventListener("click", async()=>{
-      const err = validate();
-      if(err){ errorEl.textContent = err; errorEl.style.display="block"; return; }
+    return null;
+  }
 
-      savingEl.style.display="block";
-      saveBtn.disabled = true;
+  saveBtn.addEventListener('click', async ()=>{
+    const err = validate();
+    if(err){
+      errorEl.textContent = err;
+      errorEl.style.display = 'block';
+      return;
+    }
 
+    if(!currentUser) return;
+
+    savingEl.style.display = 'block';
+    saveBtn.disabled = true;
+
+    try{
       const data = {
         uid: currentUser.uid,
+        email: currentUser.email || "",
         name: nameEl.value.trim(),
         nickname: nickEl.value.trim(),
         county: countyEl.value.trim(),
@@ -230,21 +282,31 @@
         course: courseEl.value.trim(),
         lookingFor: Array.from(selectedLooking),
         interestedIn: interestedEl.value,
-        matchPreferences:{
+        matchPreferences: {
           county: prefCountyEl.value.trim(),
           ageRange: prefAgeEl.value.trim(),
           university: prefUniEl.value.trim(),
           year: prefYearEl.value.trim()
         },
-        userType:"student",
+        userType: "student",
         createdAt: serverTimestamp()
       };
 
-      await setDoc(doc(db,"students",currentUser.uid),data);
+      await setDoc(doc(db, "students", currentUser.uid), data);
 
-      savingEl.textContent = "Saved! Redirecting…";
-      setTimeout(()=> window.location.href="home.html", 700);
-    });
-  </script>
+      savingEl.textContent = "Saved ✓ Redirecting…";
+      setTimeout(()=> window.location.href = "home.html", 900);
+
+    } catch(e){
+      errorEl.textContent = "Save failed: " + e.message;
+      errorEl.style.display = 'block';
+    } finally {
+      savingEl.style.display = 'none';
+      saveBtn.disabled = false;
+    }
+  });
+
+</script>
+
 </body>
 </html>

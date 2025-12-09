@@ -1,105 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Profile</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-    <script src="firebase.js"></script>
-
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: poppins, sans-serif;
-            background: #f9f9f9;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 450px;
-            background: white;
-            margin: 30px auto;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
-        }
-
-        h2 {
-            text-align: center;
-            color: #e60073;
-            margin-bottom: 20px;
-        }
-
-        label {
-            font-weight: 600;
-            display: block;
-            margin-top: 15px;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            margin-top: 5px;
-        }
-
-        button {
-            width: 100%;
-            margin-top: 25px;
-            padding: 14px;
-            background: #e60073;
-            border: none;
-            color: white;
-            font-size: 16px;
-            border-radius: 10px;
-        }
-
-        button:hover {
-            background: #cc0066;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <h2>Student Profile</h2>
-
-        <label>Full Name</label>
-        <input type="text" id="fullName" placeholder="Enter your full name">
-
-        <label>Course</label>
-        <input type="text" id="course" placeholder="e.g. Computer Science">
-
-        <label>Year of Study</label>
-        <select id="year">
-            <option value="">-- Select Year --</option>
-            <option value="1st Year">1st Year</option>
-            <option value="2nd Year">2nd Year</option>
-            <option value="3rd Year">3rd Year</option>
-            <option value="4th Year">4th Year</option>
-        </select>
-
-        <label>School</label>
-        <input type="text" id="school" placeholder="e.g. School of Engineering">
-
-        <button onclick="saveProfile()">Save Profile</button>
-    </div>
-
-
 <script>
-const auth = firebase.auth();
-const db = firebase.firestore();
-
 async function saveProfile() {
     const user = auth.currentUser;
+    console.log("USER:", user);
 
     if (!user) {
-        alert("You must be logged in first.");
+        alert("You must be logged in!");
         return;
     }
 
@@ -107,30 +12,36 @@ async function saveProfile() {
     const course = document.getElementById("course").value.trim();
     const year = document.getElementById("year").value.trim();
     const school = document.getElementById("school").value.trim();
+    const file = document.getElementById("profileImage").files[0];
 
-    if (!fullName || !course || !year || !school) {
-        alert("Please fill all fields.");
+    console.log("FORM DATA:", fullName, course, year, school, file);
+
+    if (!fullName || !course || !year || !school || !file) {
+        alert("Fill all fields and choose an image!");
         return;
     }
 
     try {
+        console.log("UPLOADING IMAGE...");
+        const imageUrl = await uploadToCloudinary(file);
+        console.log("IMAGE URL:", imageUrl);
+
+        console.log("SAVING TO FIRESTORE...");
         await db.collection("students").doc(user.uid).set({
             fullName,
             course,
             year,
             school,
+            imageUrl,
             uid: user.uid
         });
 
-        alert("Profile saved!");
+        alert("Saved successfully!");
         window.location.href = "home.html";
 
     } catch (error) {
-        console.error(error);
+        console.error("ERROR:", error);
         alert("Error saving profile.");
     }
 }
 </script>
-
-</body>
-</html>

@@ -1,226 +1,387 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student Profile – CampusConnect</title>
-
-<style>
-    body {
-        font-family: 'Poppins', sans-serif;
-        background: linear-gradient(135deg, #3b0a24, #12000b);
-        color: white;
-        margin: 0;
-        padding: 0;
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Student Profile — CampusConnect</title>
+  <style>
+    /* Romantic / Sexy theme (A) */
+    :root{
+      --bg1:#2a0820;
+      --bg2:#12000b;
+      --pink1:#ff69b4;
+      --pink2:#ff1493;
+      --card: rgba(255,255,255,0.06);
+      --muted: #f3c0d6;
+    }
+    html,body{height:100%;margin:0;font-family:Inter, Poppins, system-ui;}
+    body{
+      background: linear-gradient(135deg,var(--bg1),var(--bg2));
+      color:#fff;
+      display:flex;
+      justify-content:center;
+      padding:32px 16px;
+      -webkit-font-smoothing:antialiased;
     }
 
-    .container {
-        max-width: 500px;
-        margin: 40px auto;
-        background: rgba(255,255,255,0.08);
-        padding: 25px;
-        border-radius: 15px;
-        box-shadow: 0 4px 25px rgba(255,0,100,0.3);
-        backdrop-filter: blur(10px);
+    .wrap{
+      width:100%;
+      max-width:720px;
     }
 
-    h2 {
-        text-align: center;
-        color: #ff4f9a;
-        font-size: 26px;
-        margin-bottom: 10px;
+    .card{
+      background:var(--card);
+      border-radius:18px;
+      padding:26px;
+      box-shadow:0 8px 40px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,20,147,0.08);
+      backdrop-filter: blur(6px);
     }
 
-    .section-title {
-        margin-top: 25px;
-        margin-bottom: 5px;
-        color: #ff9fcf;
-        font-size: 18px;
-        font-weight: bold;
+    h1{font-family:'Great Vibes', cursive; font-size:40px;margin:0 0 6px;color:var(--pink2)}
+    p.lead{color:var(--muted);margin:0 0 18px}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 150px 1fr;
+      gap:18px;
+      align-items:start;
     }
 
-    input, select {
-        width: 100%;
-        padding: 12px;
-        margin: 8px 0 15px 0;
-        border: none;
-        background: rgba(255,255,255,0.1);
-        color: #fff;
-        border-radius: 10px;
-        outline: none;
+    /* left: profile image */
+    .left {
+      text-align:center;
+    }
+    .avatar{
+      width:130px;height:130px;border-radius:50%;object-fit:cover;border:4px solid rgba(255,77,166,0.28);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    }
+    .file-input{
+      margin-top:12px;
+    }
+    .hint{font-size:13px;color:#ffd6ea;margin-top:8px}
+
+    /* form */
+    label{display:block;font-weight:600;margin-top:12px;color:#ffd6ea}
+    input[type="text"], input[type="number"], select, textarea {
+      width:100%; padding:10px 12px; border-radius:10px; border:none;
+      background: rgba(255,255,255,0.04); color: #fff; font-size:15px;
+      outline: none;
+    }
+    textarea{min-height:86px; resize:vertical}
+    .row{display:flex;gap:12px}
+    .col{flex:1}
+
+    /* multi-choice chips */
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .chip{
+      padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.04);cursor:pointer;border:1px solid rgba(255,255,255,0.03);
+      user-select:none;
+    }
+    .chip.active{ background: linear-gradient(90deg,var(--pink1),var(--pink2)); box-shadow:0 6px 20px rgba(255,20,147,0.18); color:white; border:none }
+
+    .btn{
+      width:100%;
+      padding:14px;
+      border-radius:14px;
+      border:none;
+      cursor:pointer;
+      background: linear-gradient(90deg,var(--pink1),var(--pink2));
+      color:white;
+      font-weight:700;
+      font-size:16px;
+      margin-top:18px;
+      box-shadow: 0 10px 30px rgba(255,20,147,0.12);
     }
 
-    input::placeholder {
-        color: #aaaaaa;
+    .note{font-size:13px;color:#ffd6ea;margin-top:8px}
+    .error{color:#ffb3c7;font-weight:600;margin-top:8px}
+    @media (max-width:720px){
+      .grid{grid-template-columns: 1fr; }
+      .left{order:2;text-align:left}
     }
-
-    .save-btn {
-        width: 100%;
-        padding: 14px;
-        background: #ff4f9a;
-        border: none;
-        border-radius: 12px;
-        font-size: 18px;
-        font-weight: bold;
-        color: white;
-        cursor: pointer;
-        margin-top: 20px;
-        box-shadow: 0 3px 10px rgba(255,0,100,0.4);
-    }
-
-    .save-btn:hover {
-        background: #ff2f80;
-    }
-
-    .profile-pic-preview {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        display: block;
-        margin: 10px auto;
-        object-fit: cover;
-        border: 3px solid #ff4f9a;
-    }
-
-</style>
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Complete Your Student Profile</h1>
+      <p class="lead">Fill details honestly — your nickname & profile picture will be visible on the home page to potential matches.</p>
 
-<div class="container">
+      <div class="grid">
+        <div class="left">
+          <img id="avatarPreview" class="avatar" src="https://via.placeholder.com/300x300.png?text=Upload+Photo" alt="avatar" />
+          <div class="file-input">
+            <input id="profilePic" type="file" accept="image/*" />
+          </div>
+          <div class="hint">📸 Max 2MB. JPG / PNG</div>
+        </div>
 
-    <h2>Student Profile</h2>
+        <div class="right">
+          <!-- Basic info -->
+          <label>Full name *</label>
+          <input id="name" type="text" placeholder="Your full name" />
 
-    <!-- PROFILE PICTURE -->
-    <label class="section-title">Profile Picture</label>
-    <input type="file" id="profilePic" accept="image/*">
-    <img id="previewPic" class="profile-pic-preview" style="display:none;">
+          <label>Nickname (display name) *</label>
+          <input id="nickname" type="text" placeholder="Nickname that shows on home" />
 
-    <!-- BASIC INFO -->
-    <label class="section-title">Basic Information</label>
-    <input type="text" id="name" placeholder="Your Full Name">
-    <input type="text" id="nickname" placeholder="Nickname (shows on homepage)">
-    <input type="text" id="county" placeholder="County">
-    <input type="number" id="age" placeholder="Age">
-    <input type="text" id="university" placeholder="University / College">
-    <input type="text" id="year" placeholder="Year of Study">
-    <input type="text" id="course" placeholder="Course">
+          <div class="row">
+            <div class="col">
+              <label>County *</label>
+              <input id="county" type="text" placeholder="e.g., Nairobi" />
+            </div>
+            <div class="col">
+              <label>Age *</label>
+              <input id="age" type="number" min="18" placeholder="18" />
+            </div>
+          </div>
 
-    <!-- WHAT THEY WANT -->
-    <label class="section-title">What Are You Looking For?</label>
-    <select id="lookingFor">
-        <option value="Dating/Relationship">Dating / Relationship</option>
-        <option value="Casual">Casual</option>
-        <option value="FWB">Friends With Benefit</option>
-        <option value="Fuck Buddies">Fuck Buddies</option>
-        <option value="Study Partner">Study Partner</option>
-        <option value="Mumama">Mumama</option>
-        <option value="Mubaba">Mubaba</option>
-    </select>
+          <label>University / College *</label>
+          <input id="university" type="text" placeholder="e.g., University of Nairobi" />
 
-    <!-- INTERESTED IN -->
-    <label class="section-title">Interested In</label>
-    <select id="interestedIn">
-        <option value="Student">Student</option>
-        <option value="Outsider">Outsider</option>
-    </select>
+          <div class="row">
+            <div class="col">
+              <label>Year of study *</label>
+              <select id="year">
+                <option value="">Select year</option>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+                <option value="5">5th Year</option>
+                <option value="6">6th Year</option>
+              </select>
+            </div>
+            <div class="col">
+              <label>Course *</label>
+              <input id="course" type="text" placeholder="e.g., Computer Science" />
+            </div>
+          </div>
 
-    <!-- MATCH PREFERENCES -->
-    <label class="section-title">Match Preferences</label>
-    <input type="text" id="prefCounty" placeholder="Preferred County">
-    <input type="text" id="prefUniversity" placeholder="Preferred University/College">
-    <input type="text" id="prefYear" placeholder="Preferred Year of Study">
-    <input type="text" id="prefAgeRange" placeholder="Preferred Age Range (e.g. 18-28)">
+          <!-- What you're looking for (multi) -->
+          <label>What are you looking for? * (choose 1 or more)</label>
+          <div id="lookingChips" class="chips" aria-hidden="false">
+            <div class="chip" data-value="Dating/Relationship">Dating / Relationship</div>
+            <div class="chip" data-value="Casual">Casual</div>
+            <div class="chip" data-value="FriendsWithBenefit">Friends With Benefit</div>
+            <div class="chip" data-value="FuckBuddies">Fuck Buddies</div>
+            <div class="chip" data-value="StudyPartner">Study Partner</div>
+            <div class="chip" data-value="Mumama">Mumama</div>
+            <div class="chip" data-value="Mubaba">Mubaba</div>
+            <div class="chip" data-value="Other">Other</div>
+          </div>
 
-    <button class="save-btn" id="saveProfile">Save Student Profile</button>
+          <!-- Interested in -->
+          <label>Interested in *</label>
+          <select id="interestedIn">
+            <option value="">Select</option>
+            <option value="Student">Student</option>
+            <option value="Outsider">Outsider</option>
+            <option value="Both">Both</option>
+          </select>
 
-</div>
+          <!-- Match preferences -->
+          <label style="margin-top:14px">Match preferences</label>
+          <div class="row">
+            <div class="col">
+              <input id="prefCounty" type="text" placeholder="Preferred county (e.g., Nairobi)" />
+            </div>
+            <div class="col">
+              <input id="prefAgeRange" type="text" placeholder="Preferred age range (e.g., 18-28)" />
+            </div>
+          </div>
 
-<script type="module">
-    // -------------------------------
-    // FIREBASE IMPORT
-    // -------------------------------
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js";
+          <div id="schoolPrefs" style="margin-top:12px">
+            <input id="prefUniversity" type="text" placeholder="Preferred University/College" />
+            <input id="prefYear" type="text" placeholder="Preferred Year of study (e.g., 2nd)" style="margin-top:8px" />
+          </div>
 
-    // --------------------------------
-    // YOUR FIREBASE CONFIG
-    // --------------------------------
-    const firebaseConfig = {
-        apiKey: "YOUR_KEY",
-        authDomain: "YOUR_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_BUCKET",
-        messagingSenderId: "YOUR_SENDER",
-        appId: "YOUR_APP_ID"
-    };
+          <div id="error" class="error" style="display:none"></div>
+          <button id="saveBtn" class="btn">Save Profile</button>
+          <div id="saving" class="note" style="display:none">Saving profile…</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const storage = getStorage(app);
+  <script type="module">
+    // imports: firebase.js must exist in same folder and export { app, auth, db, storage }
+    import { auth, db, storage } from './firebase.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js";
 
-    // -------------------------
-    // SHOW PROFILE PIC PREVIEW
-    // -------------------------
-    document.getElementById("profilePic").addEventListener("change", function(event) {
-        let file = event.target.files[0];
-        if (file) {
-            let img = document.getElementById("previewPic");
-            img.src = URL.createObjectURL(file);
-            img.style.display = "block";
+    // UI refs
+    const profilePicEl = document.getElementById('profilePic');
+    const avatarPreview = document.getElementById('avatarPreview');
+    const nameEl = document.getElementById('name');
+    const nickEl = document.getElementById('nickname');
+    const countyEl = document.getElementById('county');
+    const ageEl = document.getElementById('age');
+    const uniEl = document.getElementById('university');
+    const yearEl = document.getElementById('year');
+    const courseEl = document.getElementById('course');
+    const chips = document.querySelectorAll('.chip');
+    const interestedEl = document.getElementById('interestedIn');
+    const prefCountyEl = document.getElementById('prefCounty');
+    const prefUniEl = document.getElementById('prefUniversity');
+    const prefYearEl = document.getElementById('prefYear');
+    const prefAgeEl = document.getElementById('prefAgeRange');
+    const schoolPrefs = document.getElementById('schoolPrefs');
+    const errorEl = document.getElementById('error');
+    const saveBtn = document.getElementById('saveBtn');
+    const savingEl = document.getElementById('saving');
+
+    // selection state for chips (multi)
+    const selectedLooking = new Set();
+    chips.forEach(chip=>{
+      chip.addEventListener('click', ()=> {
+        const val = chip.dataset.value;
+        if (selectedLooking.has(val)){
+          selectedLooking.delete(val);
+          chip.classList.remove('active');
+        } else {
+          selectedLooking.add(val);
+          chip.classList.add('active');
         }
+      });
     });
 
-    // -------------------------
-    // SAVE PROFILE
-    // -------------------------
-    document.getElementById("saveProfile").addEventListener("click", async () => {
+    // image preview + size validation (2MB)
+    profilePicEl.addEventListener('change', (e)=>{
+      const f = e.target.files[0];
+      if(!f) return;
+      if(f.size > 2 * 1024 * 1024){
+        alert('Image too large — max 2MB. Please resize and try again.');
+        profilePicEl.value = '';
+        return;
+      }
+      avatarPreview.src = URL.createObjectURL(f);
+    });
 
-        const user = auth.currentUser;
-        if (!user) {
-            alert("Please log in again.");
-            window.location.href = "login.html";
-            return;
-        }
+    // show/hide school prefs depending on interestedIn
+    function updateSchoolPrefs(){
+      const v = interestedEl.value;
+      if(v === 'Outsider'){
+        schoolPrefs.style.display = 'none';
+      } else {
+        schoolPrefs.style.display = 'block';
+      }
+    }
+    interestedEl.addEventListener('change', updateSchoolPrefs);
+    updateSchoolPrefs();
 
-        let profilePicFile = document.getElementById("profilePic").files[0];
-        let profilePicURL = "";
+    // ensure user is logged in
+    let currentUser = null;
+    onAuthStateChanged(auth, user => {
+      if(!user) {
+        alert('Please login first');
+        window.location.href = 'login.html';
+        return;
+      }
+      currentUser = user;
+    });
 
-        if (profilePicFile) {
-            const picRef = ref(storage, `profilePics/${user.uid}.jpg`);
-            await uploadBytes(picRef, profilePicFile);
-            profilePicURL = await getDownloadURL(picRef);
-        }
+    // validation helper
+    function validate(){
+      errorEl.style.display = 'none';
+      const name = nameEl.value.trim();
+      const nick = nickEl.value.trim();
+      const county = countyEl.value.trim();
+      const age = Number(ageEl.value);
+      const uni = uniEl.value.trim();
+      const year = yearEl.value;
+      const course = courseEl.value.trim();
+      const interested = interestedEl.value;
+      const prefCounty = prefCountyEl.value.trim();
+      const prefAge = prefAgeEl.value.trim();
 
+      if(!name) return 'Enter your full name';
+      if(!nick || nick.length < 3) return 'Nickname is required (min 3 characters)';
+      if(!county) return 'Enter your county';
+      if(!age || age < 18) return 'Age must be 18 or older';
+      if(!uni) return 'Enter your university/college';
+      if(!year) return 'Select your year of study';
+      if(!course) return 'Enter your course';
+      if(selectedLooking.size === 0) return 'Choose at least one option for what you are looking for';
+      if(!interested) return 'Select who you are interested in';
+      if(!prefCounty) return 'Enter preferred county for matches';
+      if(!prefAge) return 'Enter preferred age range (e.g. 18-28)';
+      // if interested is Student or Both, prefUniversity and prefYear required
+      if(interested !== 'Outsider'){
+        if(!prefUniEl.value.trim()) return 'Enter preferred university (or type N/A)';
+        if(!prefYearEl.value.trim()) return 'Enter preferred year of study (or type N/A)';
+      }
+      // profile pic required
+      if(!profilePicEl.files[0]) return 'Please upload a profile picture (max 2MB)';
+      return null;
+    }
+
+    // Save profile
+    saveBtn.addEventListener('click', async () => {
+      const vError = validate();
+      if(vError){
+        errorEl.textContent = vError;
+        errorEl.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      if(!currentUser) return alert('Not logged in');
+
+      errorEl.style.display = 'none';
+      savingEl.style.display = 'block';
+      saveBtn.disabled = true;
+
+      try{
+        // collect data
         const data = {
-            name: name.value,
-            nickname: nickname.value,
-            county: county.value,
-            age: age.value,
-            university: university.value,
-            year: year.value,
-            course: course.value,
-            lookingFor: lookingFor.value,
-            interestedIn: interestedIn.value,
-            matchPreferences: {
-                county: prefCounty.value,
-                university: prefUniversity.value,
-                year: prefYear.value,
-                ageRange: prefAgeRange.value
-            },
-            profilePic: profilePicURL,
-            userType: "Student"
+          uid: currentUser.uid,
+          email: currentUser.email || '',
+          name: nameEl.value.trim(),
+          nickname: nickEl.value.trim(),
+          county: countyEl.value.trim(),
+          age: Number(ageEl.value),
+          university: uniEl.value.trim(),
+          year: yearEl.value,
+          course: courseEl.value.trim(),
+          lookingFor: Array.from(selectedLooking),
+          interestedIn: interestedEl.value,
+          matchPreferences: {
+            county: prefCountyEl.value.trim(),
+            university: prefUniEl.value.trim(),
+            year: prefYearEl.value.trim(),
+            ageRange: prefAgeEl.value.trim()
+          },
+          userType: 'student',
+          createdAt: serverTimestamp()
         };
 
-        await setDoc(doc(db, "users", user.uid), data);
+        // upload profile pic
+        const file = profilePicEl.files[0];
+        if(file){
+          const storageRef = ref(storage, `profiles/${currentUser.uid}/profile.jpg`);
+          await uploadBytes(storageRef, file);
+          data.profilePic = await getDownloadURL(storageRef);
+        }
 
-        alert("Profile saved successfully!");
-        window.location.href = "home.html";
+        // save document under students collection with uid
+        await setDoc(doc(db, 'students', currentUser.uid), data);
+
+        savingEl.textContent = 'Saved ✅ Redirecting to home...';
+        setTimeout(()=> window.location.href = 'home.html', 900);
+
+      } catch(err){
+        console.error(err);
+        errorEl.textContent = 'Save failed: ' + (err.message || err);
+        errorEl.style.display = 'block';
+      } finally{
+        saveBtn.disabled = false;
+        savingEl.style.display = 'none';
+      }
     });
 
-</script>
-
+  </script>
 </body>
 </html>

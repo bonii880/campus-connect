@@ -1,192 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Student Profile</title>
-    <style>
-        body {
-            background: #5a2da5;
-            color: white;
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        .container {
-            background: rgba(255,255,255,0.1);
-            padding: 20px;
-            border-radius: 15px;
-            max-width: 450px;
-            margin: auto;
-        }
-        input, select {
-            width: 100%;
-            margin-bottom: 15px;
-            padding: 12px;
-            border-radius: 10px;
-            border: none;
-        }
-        .profile-pic {
-            width: 120px;
-            height: 120px;
-            border-radius: 100%;
-            background: #ddd;
-            object-fit: cover;
-            margin-bottom: 10px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            background: #ff2f92;
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-size: 17px;
-            font-weight: bold;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Profile – CampusConnect</title>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #3b0a24, #12000b);
+        color: white;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 500px;
+        margin: 40px auto;
+        background: rgba(255,255,255,0.08);
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 4px 25px rgba(255,0,100,0.3);
+        backdrop-filter: blur(10px);
+    }
+
+    h2 {
+        text-align: center;
+        color: #ff4f9a;
+        font-size: 26px;
+        margin-bottom: 10px;
+    }
+
+    .section-title {
+        margin-top: 25px;
+        margin-bottom: 5px;
+        color: #ff9fcf;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 12px;
+        margin: 8px 0 15px 0;
+        border: none;
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+        border-radius: 10px;
+        outline: none;
+    }
+
+    input::placeholder {
+        color: #aaaaaa;
+    }
+
+    .save-btn {
+        width: 100%;
+        padding: 14px;
+        background: #ff4f9a;
+        border: none;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: bold;
+        color: white;
+        cursor: pointer;
+        margin-top: 20px;
+        box-shadow: 0 3px 10px rgba(255,0,100,0.4);
+    }
+
+    .save-btn:hover {
+        background: #ff2f80;
+    }
+
+    .profile-pic-preview {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        display: block;
+        margin: 10px auto;
+        object-fit: cover;
+        border: 3px solid #ff4f9a;
+    }
+
+</style>
 </head>
 <body>
 
-    <h2 style="text-align:center;">Create Student Profile</h2>
+<div class="container">
 
-    <div class="container">
+    <h2>Student Profile</h2>
 
-        <img id="previewImage" class="profile-pic" src=""/>
+    <!-- PROFILE PICTURE -->
+    <label class="section-title">Profile Picture</label>
+    <input type="file" id="profilePic" accept="image/*">
+    <img id="previewPic" class="profile-pic-preview" style="display:none;">
 
-        <label>Profile Picture</label>
-        <input type="file" id="profileImage" accept="image/*" />
+    <!-- BASIC INFO -->
+    <label class="section-title">Basic Information</label>
+    <input type="text" id="name" placeholder="Your Full Name">
+    <input type="text" id="nickname" placeholder="Nickname (shows on homepage)">
+    <input type="text" id="county" placeholder="County">
+    <input type="number" id="age" placeholder="Age">
+    <input type="text" id="university" placeholder="University / College">
+    <input type="text" id="year" placeholder="Year of Study">
+    <input type="text" id="course" placeholder="Course">
 
-        <label>Name</label>
-        <input type="text" id="name">
+    <!-- WHAT THEY WANT -->
+    <label class="section-title">What Are You Looking For?</label>
+    <select id="lookingFor">
+        <option value="Dating/Relationship">Dating / Relationship</option>
+        <option value="Casual">Casual</option>
+        <option value="FWB">Friends With Benefit</option>
+        <option value="Fuck Buddies">Fuck Buddies</option>
+        <option value="Study Partner">Study Partner</option>
+        <option value="Mumama">Mumama</option>
+        <option value="Mubaba">Mubaba</option>
+    </select>
 
-        <label>Nickname</label>
-        <input type="text" id="nickname">
+    <!-- INTERESTED IN -->
+    <label class="section-title">Interested In</label>
+    <select id="interestedIn">
+        <option value="Student">Student</option>
+        <option value="Outsider">Outsider</option>
+    </select>
 
-        <label>County</label>
-        <input type="text" id="county">
+    <!-- MATCH PREFERENCES -->
+    <label class="section-title">Match Preferences</label>
+    <input type="text" id="prefCounty" placeholder="Preferred County">
+    <input type="text" id="prefUniversity" placeholder="Preferred University/College">
+    <input type="text" id="prefYear" placeholder="Preferred Year of Study">
+    <input type="text" id="prefAgeRange" placeholder="Preferred Age Range (e.g. 18-28)">
 
-        <label>Age</label>
-        <input type="number" id="age">
+    <button class="save-btn" id="saveProfile">Save Student Profile</button>
 
-        <label>University / College</label>
-        <input type="text" id="university">
+</div>
 
-        <label>Year of Study</label>
-        <input type="text" id="year">
+<script type="module">
+    // -------------------------------
+    // FIREBASE IMPORT
+    // -------------------------------
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js";
 
-        <label>Course</label>
-        <input type="text" id="course">
-
-        <label>What are you looking for?</label>
-        <select id="lookingFor" multiple>
-            <option>Dating/Relationship</option>
-            <option>Casual</option>
-            <option>Friends with Benefit</option>
-            <option>Fuck Buddies</option>
-            <option>Study Partner</option>
-            <option>Mumama</option>
-            <option>Mubaba</option>
-        </select>
-
-        <label>Interested in</label>
-        <select id="interestedIn">
-            <option value="student">Students</option>
-            <option value="outsider">Outsiders</option>
-            <option value="both">Both</option>
-        </select>
-
-        <h3>Match Preferences</h3>
-
-        <label>Preferred County</label>
-        <input type="text" id="p_county">
-
-        <label>Preferred Age (e.g 18-28)</label>
-        <input type="text" id="p_age">
-
-        <label id="labUni">Preferred University/College</label>
-        <input type="text" id="p_uni">
-
-        <label id="labYear">Preferred Year of Study</label>
-        <input type="text" id="p_year">
-
-        <button onclick="saveStudentProfile()">Save Profile</button>
-    </div>
-
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-
-<script>
+    // --------------------------------
     // YOUR FIREBASE CONFIG
+    // --------------------------------
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
+        apiKey: "YOUR_KEY",
+        authDomain: "YOUR_DOMAIN",
         projectId: "YOUR_PROJECT_ID",
         storageBucket: "YOUR_BUCKET",
-        messagingSenderId: "YOUR_MSGID",
-        appId: "YOUR_APPID"
+        messagingSenderId: "YOUR_SENDER",
+        appId: "YOUR_APP_ID"
     };
 
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const auth = firebase.auth();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
 
-    let cloudName = "YOUR_CLOUD_NAME";
-    let uploadPreset = "YOUR_UPLOAD_PRESET";
-
-    // Image Preview
-    document.getElementById("profileImage").addEventListener("change", function(){
-        let file = this.files[0];
-        document.getElementById("previewImage").src = URL.createObjectURL(file);
-    });
-
-    // Hide university/year fields if user selects "outsider"
-    document.getElementById("interestedIn").addEventListener("change", function(){
-        if(this.value === "outsider"){
-            document.getElementById("labUni").style.display = "none";
-            document.getElementById("labYear").style.display = "none";
-            document.getElementById("p_uni").style.display = "none";
-            document.getElementById("p_year").style.display = "none";
-        } else {
-            document.getElementById("labUni").style.display = "block";
-            document.getElementById("labYear").style.display = "block";
-            document.getElementById("p_uni").style.display = "block";
-            document.getElementById("p_year").style.display = "block";
+    // -------------------------
+    // SHOW PROFILE PIC PREVIEW
+    // -------------------------
+    document.getElementById("profilePic").addEventListener("change", function(event) {
+        let file = event.target.files[0];
+        if (file) {
+            let img = document.getElementById("previewPic");
+            img.src = URL.createObjectURL(file);
+            img.style.display = "block";
         }
     });
 
-    async function uploadToCloudinary(file) {
-        let url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+    // -------------------------
+    // SAVE PROFILE
+    // -------------------------
+    document.getElementById("saveProfile").addEventListener("click", async () => {
 
-        let formData = new FormData();
-        formData.append("file", file);
-        formData.append("upload_preset", uploadPreset);
-
-        let res = await fetch(url, { method: "POST", body: formData });
-        let data = await res.json();
-        return data.secure_url;
-    }
-
-    async function saveStudentProfile(){
         const user = auth.currentUser;
-
-        if(!user){
-            alert("Not logged in!");
+        if (!user) {
+            alert("Please log in again.");
+            window.location.href = "login.html";
             return;
         }
 
-        let imageFile = document.getElementById("profileImage").files[0];
-        let imageUrl = "";
+        let profilePicFile = document.getElementById("profilePic").files[0];
+        let profilePicURL = "";
 
-        if(imageFile){
-            imageUrl = await uploadToCloudinary(imageFile);
+        if (profilePicFile) {
+            const picRef = ref(storage, `profilePics/${user.uid}.jpg`);
+            await uploadBytes(picRef, profilePicFile);
+            profilePicURL = await getDownloadURL(picRef);
         }
 
-        await db.collection("students").doc(user.uid).set({
+        const data = {
             name: name.value,
             nickname: nickname.value,
             county: county.value,
@@ -194,17 +202,24 @@
             university: university.value,
             year: year.value,
             course: course.value,
-            lookingFor: Array.from(lookingFor.selectedOptions).map(o=>o.value),
+            lookingFor: lookingFor.value,
             interestedIn: interestedIn.value,
-            p_county: p_county.value,
-            p_age: p_age.value,
-            p_uni: p_uni.value,
-            p_year: p_year.value,
-            profilePic: imageUrl
-        });
+            matchPreferences: {
+                county: prefCounty.value,
+                university: prefUniversity.value,
+                year: prefYear.value,
+                ageRange: prefAgeRange.value
+            },
+            profilePic: profilePicURL,
+            userType: "Student"
+        };
 
+        await setDoc(doc(db, "users", user.uid), data);
+
+        alert("Profile saved successfully!");
         window.location.href = "home.html";
-    }
+    });
+
 </script>
 
 </body>

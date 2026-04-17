@@ -314,14 +314,13 @@
         // upload profile pic
         const file = profilePicEl.files[0];
         if (file) {
-          const storageRef = ref(storage, profiles/${currentUser.uid}/profile.jpg);
+          const storageRef = ref(storage, `profiles/${currentUser.uid}/profile.jpg`);
           await uploadBytes(storageRef, file);
           data.profilePic = await getDownloadURL(storageRef);
         }
 
         // save to outsiders collection
-        await setDoc(doc(db, 'outsiders', currentUser.uid), data);
-
+        await setDoc(doc(db, 'users', currentUser.uid), data);
         savingEl.textContent = 'Saved ✅ Redirecting to home...';
         setTimeout(()=> window.location.href = 'home.html', 900);
       } catch (err) {

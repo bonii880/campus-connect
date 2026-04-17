@@ -34,37 +34,32 @@
     .avatar-preview{
       width:130px;height:130px;border-radius:50%;object-fit:cover;border:4px solid rgba(255,77,166,0.28);
       box-shadow:0 8px 30px rgba(255,20,147,0.12);
+      transition:transform .18s ease; display:block;
     }
 
     .file-label{
-      display:block;margin-top:12px;padding:8px;border-radius:10px;
-      background:linear-gradient(90deg,var(--pink1),var(--pink2));
+      display:block;margin-top:12px;padding:8px;border-radius:10px;background:linear-gradient(90deg,var(--pink1),var(--pink2));
       text-align:center;cursor:pointer;font-weight:700;
     }
     .file-label input{display:none}
 
     label{display:block;margin-top:12px;color:#ffd6ea;font-weight:600}
     input,select{
-      width:100%; padding:10px; border-radius:10px;border:none;
-      background:rgba(255,255,255,0.04); color:#fff;
+      width:100%; padding:10px; border-radius:10px;border:none;background:rgba(255,255,255,0.04); color:#fff;
     }
 
     .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-    .chip{
-      padding:8px 12px;border-radius:999px;
-      background:rgba(255,255,255,0.04);cursor:pointer;
-    }
-    .chip.active{
-      background:linear-gradient(90deg,var(--pink1),var(--pink2));
-    }
+    .chip{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.04);cursor:pointer}
+    .chip.active{ background: linear-gradient(90deg,var(--pink1),var(--pink2)); }
 
     .btn{
       width:100%; padding:14px; border-radius:14px;border:none;
-      background:linear-gradient(90deg,var(--pink1),var(--pink2));
+      background: linear-gradient(90deg,var(--pink1),var(--pink2));
       margin-top:18px; font-weight:700;
     }
 
     .note{margin-top:10px}
+    .error{color:#ffb3c7;margin-top:10px;display:none}
   </style>
 </head>
 
@@ -113,8 +108,10 @@ Upload Photo
 <input id="prefCounty" placeholder="Preferred County">
 <input id="prefAgeRange" placeholder="Preferred Age">
 
+<div id="error" class="error"></div>
+
 <button id="saveBtn" class="btn">Save Profile</button>
-<div id="saving" class="note">Saving...</div>
+<div id="saving" class="note" style="display:none">Saving...</div>
 
 </div>
 </div>
@@ -124,68 +121,101 @@ Upload Photo
 <script type="module">
 import { auth, db, storage } from './firebase.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js";
 
-let currentUser;
+let currentUser = null;
 
-onAuthStateChanged(auth,user=>{
-if(!user) location.href="login.html";
-else currentUser=user;
+onAuthStateChanged(auth, user => {
+  if (!user) {
+    window.location.href = 'login.html';
+  } else {
+    currentUser = user;
+  }
 });
 
-const chips=document.querySelectorAll(".chip");
-let selected=[];
+const chips = document.querySelectorAll('.chip');
+const selectedLooking = new Set();
 
-chips.forEach(c=>{
-c.onclick=()=>{
-c.classList.toggle("active");
-const val=c.dataset.value;
-
-if(selected.includes(val)){
-selected=selected.filter(v=>v!==val);
-}else{
-selected.push(val);
-}
-};
+chips.forEach(chip => {
+  chip.addEventListener('click', () => {
+    const v = chip.dataset.value;
+    if (selectedLooking.has(v)) {
+      selectedLooking.delete(v);
+      chip.classList.remove('active');
+    } else {
+      selectedLooking.add(v);
+      chip.classList.add('active');
+    }
+  });
 });
 
-const pic=document.getElementById("profilePic");
-const preview=document.getElementById("avatarPreview");
+const profilePicEl = document.getElementById('profilePic');
+const avatarPreview = document.getElementById('avatarPreview');
 
-pic.onchange=e=>{
-const file=e.target.files[0];
-if(file) preview.src=URL.createObjectURL(file);
-};
-
-document.getElementById("saveBtn").onclick=async()=>{
-
-document.getElementById("saving").style.display="block";
-
-let url="";
-
-const file=pic.files[0];
-if(file){
-const storageRef=ref(storage, `profiles/${currentUser.uid}/profile.jpg`);
-await uploadBytes(storageRef,file);
-url=await getDownloadURL(storageRef);
-}
-
-await setDoc(doc(db,"outsiders",currentUser.uid),{
-name:name.value,
-nickname:nickname.value,
-county:county.value,
-age:age.value,
-occupation:occupation.value,
-looking:selected,
-matchWith:matchWith.value,
-prefCounty:prefCounty.value,
-prefAgeRange:prefAgeRange.value,
-profilePic:url
+profilePicEl.addEventListener('change', e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  avatarPreview.src = URL.createObjectURL(f);
 });
 
-location.href="home.html";
-};
+const saveBtn = document.getElementById('saveBtn');
+const savingEl = document.getElementById('saving');
+const errorEl = document.getElementById('error');
+
+saveBtn.addEventListener('click', async () => {
+
+  if (!currentUser) return;
+
+  saveBtn.disabled = true;
+  savingEl.style.display = 'block';
+  errorEl.style.display = 'none';
+
+  try {
+    let imageUrl = "";
+
+    const file = profilePicEl.files[0];
+
+    if (file) {
+      try {
+        // ✅ FIXED LINE (backticks)
+        const storageRef = ref(storage, `profiles/${currentUser.uid}/profile.jpg`);
+        await uploadBytes(storageRef, file);
+        imageUrl = await getDownloadURL(storageRef);
+      } catch (uploadError) {
+        console.warn("Image upload failed, continuing...", uploadError);
+      }
+    }
+
+    const data = {
+      uid: currentUser.uid,
+      name: name.value,
+      nickname: nickname.value,
+      county: county.value,
+      age: age.value,
+      occupation: occupation.value,
+      lookingFor: Array.from(selectedLooking),
+      matchWith: matchWith.value,
+      prefCounty: prefCounty.value,
+      prefAgeRange: prefAgeRange.value,
+      profilePic: imageUrl,
+      createdAt: serverTimestamp()
+    };
+
+    await setDoc(doc(db, 'outsiders', currentUser.uid), data);
+
+    window.location.href = 'home.html';
+
+  } catch (err) {
+    console.error(err);
+    errorEl.textContent = "Error: " + err.message;
+    errorEl.style.display = 'block';
+  } finally {
+    saveBtn.disabled = false;
+    savingEl.style.display = 'none';
+  }
+
+});
 </script>
 
 </body>

@@ -31,7 +31,7 @@
     @media (max-width:720px){ .grid{grid-template-columns: 1fr} }
 
     label{display:block;margin-top:12px;color:#ffd6ea;font-weight:600}
-    input[type="text"],input[type="number"],select,textarea{
+    input[type="text"],input[type="number"],select{
       width:100%; padding:10px 12px; border-radius:10px;border:none;background:rgba(255,255,255,0.04); color:#fff;
       font-size:15px; outline:none;
     }
@@ -61,7 +61,7 @@
       <p class="lead">Create your profile — matches will see your nickname. Fill honestly for better matches.</p>
 
       <div class="grid">
-        <!-- LEFT EMPTY (kept layout same) -->
+        <!-- LEFT SIDE (kept empty to preserve layout) -->
         <div></div>
 
         <!-- FORM -->
@@ -88,9 +88,13 @@
 
           <label>What are you looking for?</label>
           <div class="chips">
-            <div class="chip" data-value="Mubaba">Mubaba</div>
-            <div class="chip" data-value="Mumama">Mumama</div>
+            <div class="chip" data-value="SugarBoy">Sugar Boy</div>
+            <div class="chip" data-value="SugarGirl">Sugar Girl</div>
             <div class="chip" data-value="Casual">Casual</div>
+            <div class="chip" data-value="Relationship">Relationship</div>
+            <div class="chip" data-value="FWB">Friends With Benefits</div>
+            <div class="chip" data-value="Mumama">Mumama</div>
+            <div class="chip" data-value="Mubaba">Mubaba</div>
           </div>
 
           <label>Match Preference</label>
@@ -101,8 +105,11 @@
             <option value="Both">Both</option>
           </select>
 
-          <input id="prefCounty" placeholder="Preferred County">
-          <input id="prefAgeRange" placeholder="Preferred Age Range">
+          <label>Preferred County</label>
+          <input id="prefCounty" type="text">
+
+          <label>Preferred Age Range</label>
+          <input id="prefAgeRange" type="text">
 
           <div id="error" class="error"></div>
 
@@ -168,7 +175,7 @@ saveBtn.addEventListener('click', async () => {
 
     await setDoc(doc(db, "users", currentUser.uid), data);
 
-    // ✅ GO TO HOME PAGE
+    // ✅ REDIRECT WORKS
     window.location.href = "home.html";
 
   } catch (err) {

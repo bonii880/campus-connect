@@ -5,114 +5,113 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Outsider Profile — CampusConnect</title>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
-
   <style>
     :root{
       --bg1:#2a0820; --bg2:#12000b;
       --pink1:#ff69b4; --pink2:#ff1493;
       --card: rgba(255,255,255,0.06); --muted:#f3c0d6;
     }
-
+    *{box-sizing:border-box}
     body{
-      margin:0;
-      font-family:Inter, Poppins;
+      margin:0; min-height:100vh; font-family:Inter, Poppins, system-ui;
       background: linear-gradient(135deg,var(--bg1),var(--bg2));
-      color:white;
-      display:flex;
-      justify-content:center;
-      padding:28px;
+      color:#fff; display:flex; justify-content:center; padding:28px;
     }
 
-    .wrap{max-width:760px;width:100%}
-
+    .wrap{width:100%; max-width:760px}
     .card{
-      background:var(--card);
-      padding:24px;
-      border-radius:18px;
+      background:var(--card); border-radius:18px; padding:24px;
+      box-shadow:0 8px 40px rgba(0,0,0,0.45); border: 1px solid rgba(255,20,147,0.06);
+      backdrop-filter: blur(6px);
+    }
+    h1{font-family:'Great Vibes',cursive;color:var(--pink2);font-size:38px;margin:0}
+    p.lead{color:var(--muted);margin:6px 0 18px}
+
+    .grid{display:grid; grid-template-columns:150px 1fr; gap:18px; align-items:start;}
+    @media (max-width:720px){ .grid{grid-template-columns: 1fr} }
+
+    label{display:block;margin-top:12px;color:#ffd6ea;font-weight:600}
+    input[type="text"],input[type="number"],select,textarea{
+      width:100%; padding:10px 12px; border-radius:10px;border:none;background:rgba(255,255,255,0.04); color:#fff;
+      font-size:15px; outline:none;
     }
 
-    h1{
-      font-family:'Great Vibes';
-      color:var(--pink2);
-    }
+    .row{display:flex;gap:12px}
+    .col{flex:1}
 
-    input, select{
-      width:100%;
-      padding:10px;
-      margin-top:10px;
-      border-radius:10px;
-      border:none;
-      background:rgba(255,255,255,0.05);
-      color:white;
-    }
-
-    .chips{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:10px;
-    }
-
-    .chip{
-      padding:8px 12px;
-      border-radius:999px;
-      background:rgba(255,255,255,0.05);
-      cursor:pointer;
-    }
-
-    .chip.active{
-      background:linear-gradient(90deg,var(--pink1),var(--pink2));
-    }
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .chip{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.04);cursor:pointer}
+    .chip.active{ background: linear-gradient(90deg,var(--pink1),var(--pink2)); }
 
     .btn{
-      margin-top:20px;
-      width:100%;
-      padding:14px;
-      border:none;
-      border-radius:14px;
-      background:linear-gradient(90deg,var(--pink1),var(--pink2));
-      color:white;
-      font-weight:bold;
+      width:100%; padding:14px; border-radius:14px;border:none;
+      background: linear-gradient(90deg,var(--pink1),var(--pink2));
+      color:white; font-weight:700; margin-top:18px;
     }
 
-    .error{color:#ffb3c7;margin-top:10px;display:none}
+    .note{font-size:13px;color:#ffd6ea;margin-top:8px}
+    .error{color:#ffb3c7;font-weight:700;margin-top:10px;display:none}
   </style>
 </head>
 
 <body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Outsider Profile</h1>
+      <p class="lead">Create your profile — matches will see your nickname. Fill honestly for better matches.</p>
 
-<div class="wrap">
-<div class="card">
+      <div class="grid">
+        <!-- LEFT EMPTY (kept layout same) -->
+        <div></div>
 
-<h1>Outsider Profile</h1>
+        <!-- FORM -->
+        <div>
+          <label>Full name *</label>
+          <input id="name" type="text">
 
-<input id="name" placeholder="Full name">
-<input id="nickname" placeholder="Nickname">
-<input id="county" placeholder="County">
-<input id="age" type="number" placeholder="Age">
-<input id="occupation" placeholder="Occupation">
+          <label>Nickname *</label>
+          <input id="nickname" type="text">
 
-<div class="chips">
-  <div class="chip" data-value="Mubaba">Mubaba</div>
-  <div class="chip" data-value="Mumama">Mumama</div>
-  <div class="chip" data-value="Casual">Casual</div>
-</div>
+          <div class="row">
+            <div class="col">
+              <label>County *</label>
+              <input id="county" type="text">
+            </div>
+            <div class="col">
+              <label>Age *</label>
+              <input id="age" type="number">
+            </div>
+          </div>
 
-<select id="matchWith">
-  <option value="">Match Preference</option>
-  <option value="Student">Student</option>
-  <option value="Outsider">Outsider</option>
-</select>
+          <label>Occupation *</label>
+          <input id="occupation" type="text">
 
-<input id="prefCounty" placeholder="Preferred County">
-<input id="prefAgeRange" placeholder="Preferred Age Range">
+          <label>What are you looking for?</label>
+          <div class="chips">
+            <div class="chip" data-value="Mubaba">Mubaba</div>
+            <div class="chip" data-value="Mumama">Mumama</div>
+            <div class="chip" data-value="Casual">Casual</div>
+          </div>
 
-<div id="error" class="error"></div>
+          <label>Match Preference</label>
+          <select id="matchWith">
+            <option value="">Select</option>
+            <option value="Student">Student</option>
+            <option value="Outsider">Outsider</option>
+            <option value="Both">Both</option>
+          </select>
 
-<button id="saveBtn" class="btn">Save Profile</button>
+          <input id="prefCounty" placeholder="Preferred County">
+          <input id="prefAgeRange" placeholder="Preferred Age Range">
 
-</div>
-</div>
+          <div id="error" class="error"></div>
+
+          <button id="saveBtn" class="btn">Save Profile</button>
+          <div id="saving" class="note" style="display:none">Saving...</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <script type="module">
 import { auth, db } from './firebase.js';
@@ -135,7 +134,6 @@ const selectedLooking = new Set();
 chips.forEach(chip => {
   chip.addEventListener('click', () => {
     const v = chip.dataset.value;
-
     if (selectedLooking.has(v)) {
       selectedLooking.delete(v);
       chip.classList.remove('active');
@@ -148,56 +146,35 @@ chips.forEach(chip => {
 
 const saveBtn = document.getElementById('saveBtn');
 const errorEl = document.getElementById('error');
+const savingEl = document.getElementById('saving');
 
 saveBtn.addEventListener('click', async () => {
-
-  errorEl.style.display = "none";
-
   try {
-
-    if (!currentUser) throw new Error("Not logged in");
-
-    const name = name.value.trim();
-    const nickname = nickname.value.trim();
-    const county = county.value.trim();
-    const age = age.value;
-    const occupation = occupation.value.trim();
-    const matchWith = matchWith.value;
-    const prefCounty = prefCounty.value.trim();
-    const prefAge = prefAgeRange.value.trim();
-
-    if (!name || !nickname || !county || !age || !occupation) {
-      throw new Error("Fill all fields");
-    }
-
-    if (selectedLooking.size === 0) {
-      throw new Error("Select what you are looking for");
-    }
+    savingEl.style.display = "block";
 
     const data = {
       uid: currentUser.uid,
-      name,
-      nickname,
-      county,
-      age,
-      occupation,
+      name: name.value,
+      nickname: nickname.value,
+      county: county.value,
+      age: age.value,
+      occupation: occupation.value,
       lookingFor: Array.from(selectedLooking),
-      matchWith,
-      prefCounty,
-      prefAge,
+      matchWith: matchWith.value,
+      prefCounty: prefCounty.value,
+      prefAgeRange: prefAgeRange.value,
       createdAt: serverTimestamp()
     };
 
-    await setDoc(doc(db, "outsiders", currentUser.uid), data);
+    await setDoc(doc(db, "users", currentUser.uid), data);
 
-    // ✅ FIXED: NOW IT MOVES FORWARD
+    // ✅ GO TO HOME PAGE
     window.location.href = "home.html";
 
   } catch (err) {
     errorEl.innerText = err.message;
     errorEl.style.display = "block";
   }
-
 });
 </script>
 

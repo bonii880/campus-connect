@@ -40,20 +40,18 @@
     .col{flex:1}
 
     .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-    .chip{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.04);cursor:pointer}
-    .chip.active{ background: linear-gradient(90deg,var(--pink1),var(--pink2)); }
+    .chip{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.04);cursor:pointer;border:1px solid rgba(255,255,255,0.03);}
+    .chip.active{ background: linear-gradient(90deg,var(--pink1),var(--pink2)); color:#fff; }
 
     .btn{
-      width:100%; padding:14px; border-radius:14px;border:none;
-      background: linear-gradient(90deg,var(--pink1),var(--pink2));
-      color:white; font-weight:700; margin-top:18px;
+      width:100%; padding:14px; border-radius:14px;border:none; cursor:pointer;
+      background: linear-gradient(90deg,var(--pink1),var(--pink2)); color:white; font-weight:700; font-size:16px;margin-top:18px;
     }
 
     .note{font-size:13px;color:#ffd6ea;margin-top:8px}
     .error{color:#ffb3c7;font-weight:700;margin-top:10px;display:none}
   </style>
 </head>
-
 <body>
   <div class="wrap">
     <div class="card">
@@ -61,10 +59,8 @@
       <p class="lead">Create your profile — matches will see your nickname. Fill honestly for better matches.</p>
 
       <div class="grid">
-        <!-- LEFT SIDE (kept empty to preserve layout) -->
         <div></div>
 
-        <!-- FORM -->
         <div>
           <label>Full name *</label>
           <input id="name" type="text">
@@ -88,13 +84,9 @@
 
           <label>What are you looking for?</label>
           <div class="chips">
-            <div class="chip" data-value="SugarBoy">Sugar Boy</div>
-            <div class="chip" data-value="SugarGirl">Sugar Girl</div>
-            <div class="chip" data-value="Casual">Casual</div>
-            <div class="chip" data-value="Relationship">Relationship</div>
-            <div class="chip" data-value="FWB">Friends With Benefits</div>
-            <div class="chip" data-value="Mumama">Mumama</div>
-            <div class="chip" data-value="Mubaba">Mubaba</div>
+            <div class="chip">Casual</div>
+            <div class="chip">Relationship</div>
+            <div class="chip">FWB</div>
           </div>
 
           <label>Match Preference</label>
@@ -102,7 +94,6 @@
             <option value="">Select</option>
             <option value="Student">Student</option>
             <option value="Outsider">Outsider</option>
-            <option value="Both">Both</option>
           </select>
 
           <label>Preferred County</label>
@@ -112,9 +103,8 @@
           <input id="prefAgeRange" type="text">
 
           <div id="error" class="error"></div>
-
           <button id="saveBtn" class="btn">Save Profile</button>
-          <div id="saving" class="note" style="display:none">Saving...</div>
+          <div id="saving" class="note" style="display:none">Saving profile…</div>
         </div>
       </div>
     </div>
@@ -123,67 +113,52 @@
 <script type="module">
 import { auth, db } from './firebase.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+const saveBtn = document.getElementById('saveBtn');
+const errorEl = document.getElementById('error');
+const savingEl = document.getElementById('saving');
 
 let currentUser = null;
 
 onAuthStateChanged(auth, user => {
   if (!user) {
+    alert('Login first');
     window.location.href = 'login.html';
   } else {
     currentUser = user;
   }
 });
 
-const chips = document.querySelectorAll('.chip');
-const selectedLooking = new Set();
-
-chips.forEach(chip => {
-  chip.addEventListener('click', () => {
-    const v = chip.dataset.value;
-    if (selectedLooking.has(v)) {
-      selectedLooking.delete(v);
-      chip.classList.remove('active');
-    } else {
-      selectedLooking.add(v);
-      chip.classList.add('active');
-    }
-  });
-});
-
-const saveBtn = document.getElementById('saveBtn');
-const errorEl = document.getElementById('error');
-const savingEl = document.getElementById('saving');
-
 saveBtn.addEventListener('click', async () => {
+  if (!currentUser) return alert('Not logged in');
+
+  saveBtn.disabled = true;
+  savingEl.style.display = 'block';
+
   try {
-    savingEl.style.display = "block";
+    await setDoc(doc(db, 'users', currentUser.uid), {
+      name: document.getElementById('name').value,
+      nickname: document.getElementById('nickname').value,
+      county: document.getElementById('county').value,
+      age: document.getElementById('age').value,
+      occupation: document.getElementById('occupation').value,
+      matchWith: document.getElementById('matchWith').value,
+      prefCounty: document.getElementById('prefCounty').value,
+      prefAge: document.getElementById('prefAgeRange').value
+    });
 
-    const data = {
-      uid: currentUser.uid,
-      name: name.value,
-      nickname: nickname.value,
-      county: county.value,
-      age: age.value,
-      occupation: occupation.value,
-      lookingFor: Array.from(selectedLooking),
-      matchWith: matchWith.value,
-      prefCounty: prefCounty.value,
-      prefAgeRange: prefAgeRange.value,
-      createdAt: serverTimestamp()
-    };
-
-    await setDoc(doc(db, "users", currentUser.uid), data);
-
-    // ✅ REDIRECT WORKS
-    window.location.href = "home.html";
+    window.location.href = 'home.html';
 
   } catch (err) {
-    errorEl.innerText = err.message;
-    errorEl.style.display = "block";
+    console.error(err);
+    errorEl.textContent = err.message;
+    errorEl.style.display = 'block';
   }
+
+  saveBtn.disabled = false;
+  savingEl.style.display = 'none';
 });
 </script>
-
 </body>
 </html>
